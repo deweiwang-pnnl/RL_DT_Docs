@@ -130,7 +130,7 @@ deleted that same directory: a pattern aimed at data that also caught code.
 - Reward optimisation works — the direct route tripled its reward and converged cleanly.
 - The door task **as currently configured is not solvable**, and the reason is measured, not guessed.
 - Two real toolkit bugs found (buffer sampling; and see
-  [`PUBLICATION_MATERIALS_legion.md`](PUBLICATION_MATERIALS_legion.md) for the packaging and
+  [`PUBLICATION_MATERIALS_legion.md`](../PUBLICATION_MATERIALS_legion.md) for the packaging and
   TF/triton ones).
 
 **Not established:**

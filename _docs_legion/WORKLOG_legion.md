@@ -13,6 +13,7 @@ numbers and code defects go to
 
 | Round | Goal | Status |
 |---|---|---|
+| [Round-2026-09-14](rounds/Round-2026-09-14-isaaclab-tuberacking.md) | Isaac Lab on Alvika's tube task, then the well-plate ladder (reach → align → lift → stack → place) | reach 96.7 %, align 96 %; lift blocked by the converted 2F-140 gripper — see [presentations/2026-09-21-wellplate-status.md](presentations/2026-09-21-wellplate-status.md) |
 | [Round-2026-08-27](rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md) | Stand the project up on a new machine, then connect the RL toolkit to the digital twin | done — three integration routes working, toolkit fixed for Blackwell GPUs, Isaac Sim installed both ways |
 
 ---
@@ -20,7 +21,7 @@ numbers and code defects go to
 ## 2026-08-30 → 08-31 — Do the routes actually learn? No, and here is why
 
 Multi-hour runs on both routes to answer the question every earlier result left open.
-Full report: [`long-run-learning-2026-08-30.md`](long-run-learning-2026-08-30.md).
+Full report: [`long-run-learning-2026-08-30.md`](reports/long-run-learning-2026-08-30.md).
 
 - **Neither route learned the door task.** The direct route's reward tripled (105.8 → 334.3) and
   converged by episode ~400, but replaying the trained policy deterministically moves the door in
@@ -68,8 +69,8 @@ it was making the toolkit run at all.
   [D6](PUBLICATION_MATERIALS_legion.md#d6).
 - **Isaac Sim installed twice, deliberately** — the Docker container (Isaac Lab, for training) and a
   5.1.0 workstation install (GUI, for looking at the twin). Both verified loading Martin's scene.
-  Guides: [`ISAAC_SIM_UI_GUIDE.md`](ISAAC_SIM_UI_GUIDE.md),
-  [`DIGITAL_TWIN_HOWTO.md`](DIGITAL_TWIN_HOWTO.md).
+  Guides: [`ISAAC_SIM_UI_GUIDE.md`](guides/ISAAC_SIM_UI_GUIDE.md),
+  [`DIGITAL_TWIN_HOWTO.md`](guides/DIGITAL_TWIN_HOWTO.md).
 - **Three integration routes built and measured** — bare Isaac Sim (345 lines, no framework), Isaac
   Lab single-env, and Isaac Lab vectorised (1→128 environments). The vectorised adapter also drove
   four Isaac Lab built-in tasks unchanged, which is what shows it is a general bridge rather than
@@ -80,23 +81,23 @@ it was making the toolkit run at all.
 
 **What this does not show:** that anything *learns the door task*. Every run was minutes long with an
 untrained policy, and the two routes do not use the same reward. Stated at length in
-[`comparison-isaacsim-vs-isaaclab.md`](comparison-isaacsim-vs-isaaclab.md).
+[`comparison-isaacsim-vs-isaaclab.md`](reports/comparison-isaacsim-vs-isaaclab.md).
 
 ### Documents produced this round
 
 | File | What it holds |
 |---|---|
-| [`session-2026-08-27-legion.md`](session-2026-08-27-legion.md) | The session summary, written for the team |
+| [`session-2026-08-27-legion.md`](reports/session-2026-08-27-legion.md) | The session summary, written for the team |
 | [`PUBLICATION_MATERIALS_legion.md`](PUBLICATION_MATERIALS_legion.md) | Every measured number and code defect |
 | [`environment_legion.md`](environment_legion.md) | Machine setup, kernel pin, network limits, both Isaac Sim installs |
 | [`decisions_legion.md`](decisions_legion.md) | Nine decisions with reasoning and what each rules out |
 | [`team-discussion_legion.md`](team-discussion_legion.md) | Items for Malachi, Martin and Alvika |
-| [`ISAAC_SIM_UI_GUIDE.md`](ISAAC_SIM_UI_GUIDE.md) | Exploring the twin in the GUI, for learning |
-| [`DIGITAL_TWIN_HOWTO.md`](DIGITAL_TWIN_HOWTO.md) | Running the twin through Docker |
-| [`comparison-isaacsim-vs-isaaclab.md`](comparison-isaacsim-vs-isaaclab.md) | The two routes, head to head |
-| [`gpu-retest-2026-08-29.md`](gpu-retest-2026-08-29.md) | The re-tested environments in detail |
-| [`isaaclab-builtin-tests-2026-08-29.md`](isaaclab-builtin-tests-2026-08-29.md) | The four built-in tasks |
-| [`dt-via-isaaclab-2026-08-29.md`](dt-via-isaaclab-2026-08-29.md) | The scaling sweep |
+| [`ISAAC_SIM_UI_GUIDE.md`](guides/ISAAC_SIM_UI_GUIDE.md) | Exploring the twin in the GUI, for learning |
+| [`DIGITAL_TWIN_HOWTO.md`](guides/DIGITAL_TWIN_HOWTO.md) | Running the twin through Docker |
+| [`comparison-isaacsim-vs-isaaclab.md`](reports/comparison-isaacsim-vs-isaaclab.md) | The two routes, head to head |
+| [`gpu-retest-2026-08-29.md`](reports/gpu-retest-2026-08-29.md) | The re-tested environments in detail |
+| [`isaaclab-builtin-tests-2026-08-29.md`](reports/isaaclab-builtin-tests-2026-08-29.md) | The four built-in tasks |
+| [`dt-via-isaaclab-2026-08-29.md`](reports/dt-via-isaaclab-2026-08-29.md) | The scaling sweep |
 
 That is more files than the six-live-file budget in [`README.md`](../_docs/README.md) would suggest. They are
 kept separate because this machine's record should not be interleaved with the originals, but

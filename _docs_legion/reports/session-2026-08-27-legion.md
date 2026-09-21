@@ -1,7 +1,7 @@
 # Connecting the RL toolkit to the digital twin — session report
 
 **Machine:** `trossen-ai` (Legion, RTX 5090) · **Dates:** 2026-08-27 → 2026-08-29
-**Repo:** `github.com/Dewei-Wang-xx/RL4DT-Toolkit` · **Detail:** [`WORKLOG_legion.md`](WORKLOG_legion.md)
+**Repo:** `github.com/Dewei-Wang-xx/RL4DT-Toolkit` · **Detail:** [`WORKLOG_legion.md`](../WORKLOG_legion.md)
 
 ---
 
@@ -68,7 +68,7 @@ sections 3–6 depends on this.
 **Three further toolkit bugs** surfaced along the way, all pre-existing and all with fixes ready:
 `setup.py` omits every subpackage so `pip install -e .` is broken; three subpackages lack
 `__init__.py`; `gymnasium-robotics` is required but undeclared. Write-ups for Malachi in
-[`team-discussion_legion.md`](team-discussion_legion.md).
+[`team-discussion_legion.md`](../team-discussion_legion.md).
 
 ---
 
@@ -106,8 +106,8 @@ Version 5.1.0 in both, per Alvika's warning — the download page defaults to 6.
 were authored in 5.1. A 5.0.0 build had been fetched from a PNNL machine first; 5.1.0 turned out to
 download directly here without an NGC login, so no transfer was needed.
 
-Two guides written: [`ISAAC_SIM_UI_GUIDE.md`](ISAAC_SIM_UI_GUIDE.md) for exploring the twin visually,
-and [`DIGITAL_TWIN_HOWTO.md`](DIGITAL_TWIN_HOWTO.md) for the Docker route. Both mark which steps were
+Two guides written: [`ISAAC_SIM_UI_GUIDE.md`](../guides/ISAAC_SIM_UI_GUIDE.md) for exploring the twin visually,
+and [`DIGITAL_TWIN_HOWTO.md`](../guides/DIGITAL_TWIN_HOWTO.md) for the Docker route. Both mark which steps were
 verified and which were not.
 
 ---
@@ -225,7 +225,7 @@ existing rl_games PPO baseline?* — is unanswered, and needs long runs on the I
 3. **Fix the O(n) replay-buffer sampling upstream** — it throttles every long run in the toolkit,
    not just the Isaac ones.
 3. **Send the three toolkit bugs upstream** — write-ups ready in
-   [`team-discussion_legion.md`](team-discussion_legion.md).
+   [`team-discussion_legion.md`](../team-discussion_legion.md).
 4. **Decide `test_torch_td3.py`'s device handling** (Malachi's call — 12 tests assume CPU tensors).
 5. **Revisit the kernel pin** when Ubuntu ships a matching NVIDIA module, so the machine resumes
    kernel security updates.
@@ -237,10 +237,10 @@ existing rl_games PPO baseline?* — is unanswered, and needs long runs on the I
 | | |
 |---|---|
 | Session detail, day by day | [`rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md`](rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md) |
-| Every number and code defect | [`PUBLICATION_MATERIALS_legion.md`](PUBLICATION_MATERIALS_legion.md) |
-| Machine setup and its limits | [`environment_legion.md`](environment_legion.md) |
-| Decisions and their reasoning | [`decisions_legion.md`](decisions_legion.md) |
-| Items for Malachi, Martin, Alvika | [`team-discussion_legion.md`](team-discussion_legion.md) |
+| Every number and code defect | [`PUBLICATION_MATERIALS_legion.md`](../PUBLICATION_MATERIALS_legion.md) |
+| Machine setup and its limits | [`environment_legion.md`](../environment_legion.md) |
+| Decisions and their reasoning | [`decisions_legion.md`](../decisions_legion.md) |
+| Items for Malachi, Martin, Alvika | [`team-discussion_legion.md`](../team-discussion_legion.md) |
 | The toolkit fix, standalone | [`../_patches/README.md`](../_patches/README.md) |
 | Isaac Lab route code | `../_toolkits/toolkit-isaaclab/isaac_integration/` |
 | Bare Isaac Sim route code | `../_toolkits/toolkit-isaacsim/` |

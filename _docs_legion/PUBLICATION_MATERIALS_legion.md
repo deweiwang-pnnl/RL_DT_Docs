@@ -145,7 +145,7 @@ Matched: 1 environment, 2 episodes × 40 steps.
 | GUI | **yes, verified** | awkward from container |
 
 The single-environment gap flatters the direct route: that overhead is Isaac Lab doing the work that
-makes many environments possible. See [`comparison-isaacsim-vs-isaaclab.md`](comparison-isaacsim-vs-isaaclab.md).
+makes many environments possible. See [`comparison-isaacsim-vs-isaaclab.md`](reports/comparison-isaacsim-vs-isaaclab.md).
 
 **Neither route has been shown to learn the door task.** All runs were minutes long with essentially
 untrained policies. Nothing here supports a claim about learning performance, and the two routes do
@@ -153,7 +153,7 @@ not even use the same reward.
 
 ### R6 — Multi-hour learning runs: neither route learns the task {#r6}
 
-Full write-up: [`long-run-learning-2026-08-30.md`](long-run-learning-2026-08-30.md).
+Full write-up: [`long-run-learning-2026-08-30.md`](reports/long-run-learning-2026-08-30.md).
 
 | | Bare Isaac Sim (base actuated, 10 actions) | Isaac Lab (Martin's config, 7 actions) |
 |---|---|---|
