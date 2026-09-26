@@ -13,6 +13,8 @@ numbers and code defects go to
 
 | Round | Goal | Status |
 |---|---|---|
+| [Round-2026-09-22](rounds/Round-2026-09-22-wellplate-grasp-fix.md) | Fix the grasp with Martin's robot, then the 2-plate stack | in progress — lift blocker traced to our gripper setup (fingertip travel, wrong pad-joint target) |
+| [Round-2026-09-14 (09-20/21 part)](rounds/Round-2026-09-14-isaaclab-tuberacking.md#2026-09-20--re-scoped-to-the-well-plate-task-overnight-ladder-launched) | Well-plate ladder: reach → align → lift → stack | reach 96.7 %, align 96 %, lift 0 % (8 runs), stack 0 %; presentation videos 09-21 |
 | [Round-2026-09-14](rounds/Round-2026-09-14-isaaclab-tuberacking.md) | Isaac Lab on Alvika's tube task, then the well-plate ladder (reach → align → lift → stack → place) | reach 96.7 %, align 96 %; lift blocked by the converted 2F-140 gripper — see [presentations/2026-09-21-wellplate-status.md](presentations/2026-09-21-wellplate-status.md) |
 | [Round-2026-08-27](rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md) | Stand the project up on a new machine, then connect the RL toolkit to the digital twin | done — three integration routes working, toolkit fixed for Blackwell GPUs, Isaac Sim installed both ways |
 
