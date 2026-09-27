@@ -61,10 +61,28 @@ Evidence and chronology: `RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_f
   with the gripper pointing down; slows convergence, not the plateau's cause); ContactSensor with a filter read 0 N
   during a push that moved the plate — not trusted here.
 
+### 09-26 afternoon/evening — ladder v3: align → lift → stack (2 plates)
+
+Chronology with every diagnosis: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-26 entries). Deterministic evaluation,
+128 episodes each: **align 82.0 %, lift 87.5 %, 2-plate stack 50.8 %** at the training tolerances; strict 0.0 / 14.8 /
+22.7 %. Evidence set for the team: `results/2026-09-26_summary/`.
+
+- Robot gravity off (Dewei; realistic arm later): arm reaches IK targets to 0.2 mm vs ~410 mm off with gravity on.
+- Ladder gate moved to the deterministic eval: with a binary gripper, exploration noise flips the grip open, so the
+  training success under-reports (lift 19.9 % noisy vs 87.5 % deterministic).
+- PPO action std grew 1.0 → 3.7 across warm-started stages (entropy 0.01, actions clipped to ±1) and collapsed stack →
+  entropy 0.001, std reset to 0.5 at warm start (`scripts/reset_action_std.py`).
+- Stack reward bugs: goal terms and `lifting` were gated at rest + 4 cm while the stacked plate sits at rest + 2.6 cm,
+  so placing lost reward → gated at rest + 1 cm, `placed` term, grasp_ready 5 → 1.
+- Placed but never released (gripper mean −3, std 0.5) → gripper-only exploration std 2.0 → 28.9 % → 50.8 %.
+- Tools added: `eval_policy.py` (+ `--diag_stack` timeout diagnostic), `record_labelled.py` (captioned consecutive
+  episodes), `probe_plate_frames.py`, view preset S (stack target close-up).
+
 ## Open
 
-- Robot gravity and arm gains in training (relative IK cannot hold small corrections): Dewei's decision.
+- Strict precision (lift 10 cm: 14.8 %, stack 1 cm: 22.7 %); 12.5 % of stack episodes drop the plate.
+- Realistic arm (gravity on + compensation) — Dewei: later.
 
 ## Next
 
-Show Dewei F1–F3, V1, V2, S1 and the gate; then A4 smoke test and the overnight ladder v3 (G2).
+Dewei's review of the 09-26 results; then per PLAN v3 §6 (precision, 3 plates, loose bottom plate, other libraries).
