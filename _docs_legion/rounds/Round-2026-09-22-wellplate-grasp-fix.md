@@ -78,11 +78,33 @@ Chronology with every diagnosis: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-26 
 - Tools added: `eval_policy.py` (+ `--diag_stack` timeout diagnostic), `record_labelled.py` (captioned consecutive
   episodes), `probe_plate_frames.py`, view preset S (stack target close-up).
 
+### 09-26 night → 09-27 morning — PLAN v4: centred 2-plate stack (unattended, "work to the end")
+
+Chronology: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-26 night / 09-27 entries). Evidence:
+`results/2026-09-27_centered/` (README, F5, F6, V5). **Final criteria — centring ≤ 5 mm, twist ≤ 3° (long edges,
+0°/180° equal), tilt ≤ 3°, released at rest: 90.6 % deterministic over 128 episodes** (target ≥ 40 %; the 09-26 stack
+policy 0.0 %). Successful episodes: median 2.4 mm, 0.9° twist, 0.0° tilt. Final policy
+`2026-09-27_10-59-14_centered/model_20593.pt`, task `Wellplate-Centered-v0`.
+
+- Curriculum (deterministic): C1a 15 mm/45°/5° 67.2 % → C1b 30° 67.2 % → C1c 20° 73.4 % → C1 10° 85.2 % →
+  C2 10 mm/5°/3° 87.5 % → C3 5 mm/3°/3° 90.6 %.
+- Twist measured on the long edges; the target mesh is rotated 48.97° inside its prim.
+- Twist observation (sin 2Δ, cos 2Δ) added; checkpoints widened with zero weights (`scripts/widen_obs_checkpoint.py`).
+- Adaptive LR pinned at its 1e-5 floor → fixed 1e-4; wrist-yaw action scale 0.1 (only ~15 % of a relative command is
+  realized per step). A probe showed turning the grasped plate is physically easy (42° → 5.7°).
+- Success only below 10° twist rewarded nothing → twist curriculum 45° → 30° → 20° → 10°.
+- Placed but never released: the success bonus (weight 50 × dt = 1.7 once) was below the critic's noise under
+  truncation bootstrapping → weight 600 (C1a 1.6 % → 67.2 %).
+- Driver bug (C1 restarted from the 09-26 policy after C1a–C1c) caught within a minute.
+
 ## Open
 
-- Strict precision (lift 10 cm: 14.8 %, stack 1 cm: 22.7 %); 12.5 % of stack episodes drop the plate.
+- Strict precision of the 09-26 ladder (lift 10 cm: 14.8 %) — superseded for stacking by the centred policy (90.6 % at 5 mm).
+- Centred stack failures at C3: 7.8 % time out (mostly the plate never picked up cleanly), 1.6 % drops.
+- Bottom plate is fixed (kinematic); 3 plates not started.
 - Realistic arm (gravity on + compensation) — Dewei: later.
 
 ## Next
 
-Dewei's review of the 09-26 results; then per PLAN v3 §6 (precision, 3 plates, loose bottom plate, other libraries).
+Dewei's review of the centred-stack results; then PLAN v4 §D4: 3 plates ((ii) hand-off, then (i)), loose bottom plate,
+realistic arm (gravity on + compensation), other RL libraries.
