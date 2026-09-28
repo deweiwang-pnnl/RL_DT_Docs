@@ -7,8 +7,8 @@
 <!--
   Offline slide deck (no internet needed). Open in any browser.
   Keys: → / Space / PageDown next · ← / PageUp previous · Home / End · F fullscreen · P or Ctrl+P prints one slide per page.
-  Videos play from the code repo: this file expects RL_DT_docs and RL_DT side by side in one folder
-  (…/RL_Twin/RL_DT_docs and …/RL_Twin/RL_DT). If a video does not load, open the path shown under it.
+  Videos play from ./videos/ next to this file (copies of the curated videos in RL_DT/_isaaclab_wellplate/results/),
+  so this folder is self-contained. If a video does not load, open the file named under it.
 -->
 <style>
   :root { --ink:#141414; --ink2:#4d4c48; --muted:#8a8984; --line:#e3e2dd; --bg:#ffffff; --accent:#2a78d6; --accent2:#eb6834; --soft:#f4f3ef; }
@@ -124,9 +124,9 @@
       </ul>
       <p class="note">Also: robot gravity off for now (the arm stalled 0.3–0.4 m short without compensation) — the realistic arm came later (slide 12).</p>
     </div>
-    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/02_grasp_before_vs_fixed.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4"></video></div>
+    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/02_grasp_before_vs_fixed.png" src="videos/V2_grasp_G0_vs_fixed.mp4"></video></div>
       <div class="cap">Left: 09-20 setup, the plate stays on the table. Right: fixed, lifted 10 cm.</div>
-      <div class="path">RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4</div></div>
+      <div class="path">videos/V2_grasp_G0_vs_fixed.mp4 · also V1_sweep_G0_vs_G1.mp4 (pads in a V vs parallel)</div></div>
   </div>
   <div class="foot">4</div>
 </section>
@@ -153,9 +153,9 @@
   <div class="row">
     <div class="col w60"><div class="fig"><img src="assets/04_ladder_success.png" alt="Bar chart: align 82, lift 87.5, stack 50.8 percent"></div></div>
     <div class="col w40">
-      <div class="fig"><video controls preload="none" poster="assets/05_lift_before_after.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-26_summary/V3_lift_before_after_viewA.mp4"></video></div>
+      <div class="fig"><video controls preload="none" poster="assets/05_lift_before_after.png" src="videos/V3_lift_before_after_viewA.mp4"></video></div>
       <div class="cap">Lift, before (09-20) vs after.</div>
-      <div class="path">results/2026-09-26_summary/V3_lift_before_after_viewA.mp4 · V4_stack_8_episodes_labelled.mp4</div>
+      <div class="path">videos/V3_lift_before_after_viewA.mp4 · V3_lift_before_after_closeup.mp4 · V4_stack_8_episodes_labelled.mp4</div>
       <p class="note">What it took: gate on deterministic eval (noise flips a binary gripper); entropy 0.01 → 0.001; stack rewards that no longer switch off at the goal; exploration on the gripper so it learns to let go.</p>
     </div>
   </div>
@@ -167,9 +167,9 @@
   <div class="kicker">Centred stacking</div>
   <h2>Centred, aligned, level: 90.6 % (the 09-26 policy: 0 %)</h2>
   <div class="row">
-    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/07_centred_before_after.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-27_centered/V5_centred_before_vs_after.mp4"></video></div>
+    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/07_centred_before_after.png" src="videos/V5_centred_before_vs_after.mp4"></video></div>
       <div class="cap">Before: 09-26 stack policy (twist ~73°, mostly still holding the plate). After: centred policy — captions give each episode's errors.</div>
-      <div class="path">results/2026-09-27_centered/V5_centred_before_vs_after.mp4</div></div>
+      <div class="path">videos/V5_centred_before_vs_after.mp4 · V5b_centred_final_8_episodes_viewS.mp4</div></div>
     <div class="col w40">
       <table>
         <tr><th>Criterion</th><th>Target</th><th>Median achieved</th></tr>
@@ -209,9 +209,9 @@
   <div class="kicker">Three plates</div>
   <h2>All three of Martin's plates, stacked</h2>
   <div class="row">
-    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/10_three_plates_storyboard.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-27_stack3/V6_three_plates_E4_viewT.mp4"></video></div>
+    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/10_three_plates_storyboard.png" src="videos/V6_three_plates_E4_viewT.mp4"></video></div>
       <div class="cap">Final setting (all loose, loose bottom plate, realistic arm): 6 consecutive episodes, 4 successes; captions give each plate's error.</div>
-      <div class="path">results/2026-09-27_stack3/V6_three_plates_E4_viewT.mp4 (overview) · V7_three_plates_E4_viewS.mp4 (close-up)</div></div>
+      <div class="path">videos/V6_three_plates_E4_viewT.mp4 (overview) · V7_three_plates_E4_viewS.mp4 (close-up)</div></div>
     <div class="col w40">
       <div class="fig"><img src="assets/11_three_plates_closeup.png" alt="Close-up: white on black, yellow on white"></div>
       <p class="note">The bottom plate renders black in our container although it uses the same mesh as the other two — cause not checked yet (a question for Martin).</p>

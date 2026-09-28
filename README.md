@@ -1,15 +1,15 @@
 # RL_DT_docs — documentation for the RL-for-digital-twin project
 
 Notes, reports, meeting materials and learning material. **No code lives here** — the code, training results and
-videos are in the sibling repo `RL_DT` (PNNL GitLab). Keep the two repos side by side in one folder:
+all recordings are in the sibling repo `RL_DT` (PNNL GitLab). Presentation folders carry their own copies of the
+stills and presentable videos, so they work on their own. Keeping the two repos side by side is still convenient,
+because reports cite paths like `RL_DT/_isaaclab_wellplate/results/…`:
 
 ```
 RL_Twin/
 ├── RL_DT/          code + results (the well-plate task: RL_DT/_isaaclab_wellplate/)
 └── RL_DT_docs/     this repo
 ```
-
-The meeting slides play videos straight from `RL_DT/…/results/` through that relative layout.
 
 ## Start here
 
@@ -42,6 +42,7 @@ other machine.
 - **Rounds** (`rounds/Round-YYYY-MM-DD-slug.md`): one continuous block of work, written as it happens, not edited
   afterwards except for pointers.
 - **Decisions** are append-only: what was chosen, why, what it rules out, and who decided.
-- Presentations are self-contained folders (`slides.html` offline, `slides.md` for Marp → PowerPoint, `assets/`).
+- Presentations are self-contained folders (`slides.html` offline, `slides.md` for Marp → PowerPoint, `assets/`,
+  `videos/`).
 - Large or regenerable artefacts (checkpoints, TensorBoard logs, replay buffers) stay out of both repos; hand-carry
   bundles go to `RL_Twin/_exports/` on the machine that made them.

@@ -67,7 +67,7 @@ Weekly meeting · 2026-09-28 · Dewei Wang · Legion laptop (RTX 5090)
 
 ![w:720](assets/02_grasp_before_vs_fixed.png)
 
-[▶ V2 grasp: 09-20 setup vs fixed](../../../../RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4)
+[▶ V2 grasp: 09-20 setup vs fixed](videos/V2_grasp_G0_vs_fixed.mp4)
 
 ---
 
@@ -83,7 +83,7 @@ Weekly meeting · 2026-09-28 · Dewei Wang · Legion laptop (RTX 5090)
 
 ![w:760 center](assets/04_ladder_success.png)
 
-[▶ V3 lift before/after](../../../../RL_DT/_isaaclab_wellplate/results/2026-09-26_summary/V3_lift_before_after_viewA.mp4) · [▶ V4 stack, 8 episodes](../../../../RL_DT/_isaaclab_wellplate/results/2026-09-26_summary/V4_stack_8_episodes_labelled.mp4)
+[▶ V3 lift before/after](videos/V3_lift_before_after_viewA.mp4) · [▶ V4 stack, 8 episodes](videos/V4_stack_8_episodes_labelled.mp4)
 
 <span class="small">Gate on deterministic eval (noise flips a binary gripper) · entropy 0.01 → 0.001 · stack rewards that do not switch off at the goal · gripper exploration so it learns to let go.</span>
 
@@ -97,7 +97,7 @@ Weekly meeting · 2026-09-28 · Dewei Wang · Legion laptop (RTX 5090)
 |---|---|---|---|
 | median **2.4 mm** | **0.9°** | **0.0°** | yes |
 
-[▶ V5 before vs after, 8 episodes each](../../../../RL_DT/_isaaclab_wellplate/results/2026-09-27_centered/V5_centred_before_vs_after.mp4)
+[▶ V5 before vs after, 8 episodes each](videos/V5_centred_before_vs_after.mp4)
 
 ---
 
@@ -115,7 +115,7 @@ Weekly meeting · 2026-09-28 · Dewei Wang · Legion laptop (RTX 5090)
 
 ![w:1000 center](assets/10_three_plates_storyboard.png)
 
-[▶ V6 final setting, overview, 6 episodes](../../../../RL_DT/_isaaclab_wellplate/results/2026-09-27_stack3/V6_three_plates_E4_viewT.mp4) · [▶ V7 close-up](../../../../RL_DT/_isaaclab_wellplate/results/2026-09-27_stack3/V7_three_plates_E4_viewS.mp4)
+[▶ V6 final setting, overview, 6 episodes](videos/V6_three_plates_E4_viewT.mp4) · [▶ V7 close-up](videos/V7_three_plates_E4_viewS.mp4)
 
 <span class="small">The bottom plate renders black in our container although it uses the same mesh as the other two — cause not checked yet.</span>
 

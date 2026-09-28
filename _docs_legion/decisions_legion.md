@@ -183,3 +183,19 @@ policy trained from it; the evaluator switches by the environment's phase. Commi
 
 **Rules out, for now:** a single policy that decides when the first plate is done. Worth revisiting once the
 two-skill baseline is solid.
+
+## 2026-09-28 — Stop tracking well-plate training output in `RL_DT` (Dewei)
+
+**Chose:** ignore the well-plate task's checkpoints (rsl_rl, skrl, rl_games, SB3), training-time videos and Hydra
+`outputs/`; keep tracking each run's `params/*.yaml`, SB3's `model_vecnormalize.pkl`, the hand-off bank
+`data/handoff_bank.pt` and everything in `results/`. The round's 83 unpushed commits were rewritten to drop the same
+files (backup branch `backup/pre-cleanup-2026-09-28` on the Legion laptop). Presentable videos and stills are also
+copied into `presentations/2026-09-28-weekly/`.
+
+**Why:** the round's commits carried 4 GB of checkpoints (3.8 GB of them intermediate rsl_rl checkpoints) and the
+push to PNNL GitLab failed mid-upload; the checkpoints behind reported results are cited by path in the results
+READMEs, `stages.md` and `PROGRESS.md`, and stay on the Legion laptop. The push shrank to 176 MB.
+
+**Rules out:** reloading a trained policy from a git clone on another machine — copy the cited checkpoint by hand.
+Supersedes the 2026-09-14 "track everything in RL_DT" rule for `_isaaclab_wellplate/`; files already pushed before
+09-28 remain in GitLab's history.

@@ -5,18 +5,14 @@ curves in TensorBoard — from the work computer, or live from the Legion laptop
 
 ## 0. Before the meeting (10 minutes)
 
-1. Sync both repos into **one parent folder**, side by side — the slides find the videos by relative path:
-   ```
-   RL_Twin/
-   ├── RL_DT/          code + results (videos, charts) — _isaaclab_wellplate/results/
-   └── RL_DT_docs/     docs — _docs_legion/presentations/2026-09-28-weekly/slides.html
-   ```
+1. Sync `RL_DT_docs`. The slides folder `_docs_legion/presentations/2026-09-28-weekly/` is self-contained: stills in
+   `assets/`, the nine presentable videos in `videos/`. (The same videos, and every other recording, are also in
+   `RL_DT/_isaaclab_wellplate/results/`.)
 2. Copy the TensorBoard bundle `RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz` (14 MB, **not in git** — the
    logs are git-ignored) from the Legion laptop, e.g. `scp aidev@trossen-ai:RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz .`
    or a USB stick.
 3. Open `RL_DT_docs/_docs_legion/presentations/2026-09-28-weekly/slides.html` in Chrome / Edge / Firefox and click
-   through once: every video should show a poster frame and play. If one does not, the path printed under it is the
-   file to open directly.
+   through once: every video should show a poster frame and play. If one does not, open it from `videos/` directly.
 4. Start TensorBoard (§ 3) in a second window, so it is ready when someone asks "how did training go?".
 
 ## 1. The slides
@@ -33,7 +29,7 @@ from ~0:00, point at the right side) → 9–11 (three plates, play V6 at 1:07) 
 
 ## 2. The recordings
 
-All under `RL_DT/_isaaclab_wellplate/results/`. Every labelled video carries a caption per episode with its outcome and
+In `presentations/2026-09-28-weekly/videos/` (copies) and `RL_DT/_isaaclab_wellplate/results/` (originals, paths below). Every labelled video carries a caption per episode with its outcome and
 the final errors, so the team can read what they see.
 
 | Video | Length | What it shows | Where to look |
