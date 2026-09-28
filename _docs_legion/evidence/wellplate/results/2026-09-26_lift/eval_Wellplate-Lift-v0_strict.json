@@ -1,0 +1,15 @@
+{
+ "task": "Wellplate-Lift-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-26_20-29-26_lift/model_3295.pt",
+ "tag": "strict",
+ "overrides": [
+  "env.terminations.success.params.min_level=0.996"
+ ],
+ "episodes": 128,
+ "rates": {
+  "time_out": 0.8125,
+  "plate_dropped": 0.0391,
+  "arm_unstable": 0.0,
+  "success": 0.1484
+ }
+}

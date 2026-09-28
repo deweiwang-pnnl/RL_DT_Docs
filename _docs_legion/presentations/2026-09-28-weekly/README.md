@@ -1,6 +1,6 @@
 # Well-plate stacking — weekly meeting 2026-09-28
 
-*Dewei Wang · Legion laptop (RTX 5090) · round 09-22 → 09-28 · code and evidence in `RL_DT/_isaaclab_wellplate/`*
+*Dewei Wang · Legion laptop (RTX 5090) · round 09-22 → 09-28 · evidence copies in [`../../evidence/`](../../evidence/), code in the `RL_DT` repo*
 
 ## Slides
 
@@ -9,7 +9,7 @@
 | [`slides.html`](slides.html) | **Present from this.** Double-click, it opens in any browser, works offline. ← / → to move, F for full screen, P to print (one slide per page → "Save as PDF"). The videos play in the slides. |
 | [`slides.md`](slides.md) | The same slides for Marp: VS Code extension "Marp for VS Code" → preview, and "Export Slide Deck" to **PowerPoint** or PDF. Videos are links there. |
 | [`assets/`](assets/) | The 15 stills and charts used in the slides (reusable in any deck). |
-| [`videos/`](videos/) | The 9 presentable videos (65 MB), copied from `RL_DT/_isaaclab_wellplate/results/`: V1 gripper sweep, V2 grasp before/fixed, V3 lift before/after (two views), V4 2-plate stack, V5 centred before/after, V5b centred final, V6 / V7 three plates (overview / close-up). |
+| [`videos/`](videos/) | The 9 presentable videos (65 MB), copied from the results (all results: [`../../evidence/wellplate/results/`](../../evidence/wellplate/results/)): V1 gripper sweep, V2 grasp before/fixed, V3 lift before/after (two views), V4 2-plate stack, V5 centred before/after, V5b centred final, V6 / V7 three plates (overview / close-up). |
 
 This folder is self-contained: the slides play the videos from `videos/`.
 

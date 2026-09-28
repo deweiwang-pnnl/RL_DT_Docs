@@ -1,0 +1,309 @@
+diff --git a/jlab_opt_control/__init__.py b/jlab_opt_control/__init__.py
+index 717b188..eeedc3b 100644
+--- a/jlab_opt_control/__init__.py
++++ b/jlab_opt_control/__init__.py
+@@ -1 +1,28 @@
++# Pre-load triton's native extension, unless TensorFlow has already been loaded.
++#
++# Background: torch pulls in triton (its GPU compiler) lazily -- e.g. when an Adam optimizer is
++# constructed. Triton's compiled extension (triton._C.libtriton) and TensorFlow's native libraries
++# conflict, and whichever loads *second* segfaults. Left alone, the toolkit's import order let TF
++# win that race (via the Keras agents, or via torch.utils.tensorboard, which imports TF), so triton
++# lost and the process died with SIGSEGV partway through building a torch agent.
++#
++# Loading triton here -- at the top of the package, before any submodule is imported -- makes it
++# the first of the two to initialise, after which TensorFlow loads happily alongside it.
++#
++# The `'tensorflow' not in sys.modules` guard matters: if the *caller* imported TensorFlow before
++# importing this package (several files in utests/ do exactly that, as does any TF-first user
++# script), then TF has already won and forcing triton in afterwards is precisely the ordering that
++# segfaults. In that case we leave triton alone -- torch will import it later only if a torch agent
++# is actually used, which is the pre-existing behaviour for a TF-only run.
++#
++# Deliberately best-effort: the toolkit must keep working where triton is absent (CPU-only installs,
++# non-NVIDIA machines), where the import simply fails and is ignored.
++import sys as _sys
++
++if 'tensorflow' not in _sys.modules:  # pragma: no cover - environment dependent
++    try:
++        import triton._C.libtriton  # noqa: F401
++    except Exception:  # noqa: BLE001 - any failure here is non-fatal by design
++        pass
++
+ from jlab_opt_control.core import Agent
+diff --git a/jlab_opt_control/agents/__init__.py b/jlab_opt_control/agents/__init__.py
+index 50593b4..7f5be02 100644
+--- a/jlab_opt_control/agents/__init__.py
++++ b/jlab_opt_control/agents/__init__.py
+@@ -27,15 +27,50 @@
+ # POSSIBILITY OF SUCH DAMAGE.
+ 
+ from jlab_opt_control.agents.registration import register, make, list_registered_modules
+-from jlab_opt_control.agents.keras_td3 import KerasTD3
+-from jlab_opt_control.agents.keras_redq_td3 import KerasREDQTD3
+-from jlab_opt_control.agents.keras_ddpg import KerasDDPG
+-from jlab_opt_control.agents.keras_sac import KerasSAC
+-from jlab_opt_control.agents.keras_sindy_critic_td3 import KerasSINDyCriticTD3
+-from jlab_opt_control.agents.keras_uncertainty_td3 import KerasUncertaintyTD3
+-from jlab_opt_control.agents.keras_sindy_uncertainty_td3 import KerasSINDyUncertaintyTD3
+ from jlab_opt_control.agents.torch_td3 import TorchTD3
+ 
++# The Keras agents are imported lazily (PEP 562 module __getattr__) rather than eagerly.
++#
++# Why: importing TensorFlow installs its own CUDA stub libraries into the process. Once that
++# happens, torch.cuda.is_available() starts returning False with "Error 302: Error loading CUDA
++# libraries", the torch agents silently fall back to CPU, and any later import of triton (pulled
++# in by torch.optim) segfaults against the corrupted CUDA state. Importing every Keras agent at
++# package import time meant `import jlab_opt_control.agents` alone was enough to trigger this,
++# even for a torch-only run.
++#
++# Lazy loading keeps `TorchTD3-v0` runs entirely TensorFlow-free while leaving the Keras agents
++# fully available: the registry resolves them by string entry point at make() time, so they are
++# imported on first use with no change to their behaviour or public API.
++#
++# Note this only defers the problem for mixed runs -- a Keras agent in the same process as a torch
++# agent will still hit the CUDA conflict. Running the two frameworks separately is the supported
++# path; see _docs/strategy.md Part 2 for the longer-term "keep the torch layer TF-free" plan.
++_KERAS_AGENTS = {
++    "KerasTD3": "jlab_opt_control.agents.keras_td3",
++    "KerasREDQTD3": "jlab_opt_control.agents.keras_redq_td3",
++    "KerasDDPG": "jlab_opt_control.agents.keras_ddpg",
++    "KerasSAC": "jlab_opt_control.agents.keras_sac",
++    "KerasSINDyCriticTD3": "jlab_opt_control.agents.keras_sindy_critic_td3",
++    "KerasUncertaintyTD3": "jlab_opt_control.agents.keras_uncertainty_td3",
++    "KerasSINDyUncertaintyTD3": "jlab_opt_control.agents.keras_sindy_uncertainty_td3",
++}
++
++
++def __getattr__(name):
++    """Import a Keras agent on first attribute access (PEP 562)."""
++    if name in _KERAS_AGENTS:
++        import importlib
++
++        module = importlib.import_module(_KERAS_AGENTS[name])
++        attr = getattr(module, name)
++        globals()[name] = attr  # cache so subsequent lookups skip this path
++        return attr
++    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
++
++
++def __dir__():
++    return sorted(list(globals()) + list(_KERAS_AGENTS))
++
+ 
+ # Single Objective Agents
+ register(
+diff --git a/jlab_opt_control/core/__init__.py b/jlab_opt_control/core/__init__.py
+index 8120126..60495a6 100644
+--- a/jlab_opt_control/core/__init__.py
++++ b/jlab_opt_control/core/__init__.py
+@@ -1,3 +1,25 @@
+ from jlab_opt_control.core.agent_core import Agent
+ from jlab_opt_control.core.replay_core import Replay
+-from jlab_opt_control.core.model_core import Model
++
++# `Model` is imported lazily: model_core defines it as a subclass of tf.keras.Model, so importing
++# it pulls in TensorFlow. Because this module is reached from jlab_opt_control/__init__.py, an
++# eager import here meant that merely importing the package installed TensorFlow's CUDA stubs,
++# which breaks torch's CUDA detection for the whole process and segfaults the torch agents. See
++# the longer note in jlab_opt_control/agents/__init__.py.
++#
++# The TF/Keras models that subclass Model import it directly from jlab_opt_control.core.model_core,
++# so they are unaffected; only `from jlab_opt_control.core import Model` is deferred to first use.
++
++
++def __getattr__(name):
++    """Import the TF-backed Model class on first attribute access (PEP 562)."""
++    if name == "Model":
++        from jlab_opt_control.core.model_core import Model
++
++        globals()["Model"] = Model  # cache so subsequent lookups skip this path
++        return Model
++    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
++
++
++def __dir__():
++    return sorted(list(globals()) + ["Model"])
+diff --git a/jlab_opt_control/drivers/run_continuous.py b/jlab_opt_control/drivers/run_continuous.py
+index 2e576af..189abf9 100644
+--- a/jlab_opt_control/drivers/run_continuous.py
++++ b/jlab_opt_control/drivers/run_continuous.py
+@@ -30,13 +30,18 @@
+ import argparse
+ import logging
+ import os
++import sys
+ import time
+ import math
+ from datetime import datetime
+ import warnings
+ 
+ # Third-Party Imports
+-import tensorflow as tf
++# TensorFlow is imported lazily, only when a TF/Keras agent is actually requested. Importing it
++# installs CUDA stub libraries that break torch's CUDA detection for the rest of the process
++# (torch.cuda.is_available() -> False, "Error 302: Error loading CUDA libraries"), which silently
++# forces torch agents onto the CPU and segfaults when torch.optim later pulls in triton. See the
++# longer note in jlab_opt_control/agents/__init__.py.
+ import numpy as np
+ from tqdm import tqdm
+ import gymnasium as gym
+@@ -62,9 +67,45 @@ except ImportError:
+     run_openai_log.info("PACEs environments not installed")
+ 
+ seed = time.time_ns() % np.power(2, 32)  # Numpy seed must be between 0 and 2^32 - 1
+-tf.random.set_seed(seed)
+ np.random.seed(seed)
+ 
++
++def _agent_uses_tensorflow(agent_id):
++    """True for the Keras/TF agents, False for the torch ones.
++
++    Used to decide whether TensorFlow may be imported at all in this process. Errs on the side of
++    importing TF for unrecognised ids, so third-party agents keep the previous behaviour.
++    """
++    return not str(agent_id).lower().startswith('torch')
++
++
++class _SummaryWriter:
++    """Minimal scalar-logging wrapper over either torch's or TF's TensorBoard writer.
++
++    Both write the same event-file format, so existing TensorBoard workflows are unaffected. The
++    backend is chosen to match the agent so that a torch-only run never imports TensorFlow.
++    """
++
++    def __init__(self, logdir, use_tensorflow):
++        self._use_tf = use_tensorflow
++        if use_tensorflow:
++            import tensorflow as tf
++            self._writer = tf.summary.create_file_writer(logdir)
++            self._writer.set_as_default()
++            self._tf = tf
++        else:
++            from torch.utils.tensorboard import SummaryWriter
++            self._writer = SummaryWriter(logdir)
++
++    def scalar(self, tag, value, step):
++        if self._use_tf:
++            self._tf.summary.scalar(tag, data=value, step=step)
++        else:
++            self._writer.add_scalar(tag, value, global_step=step)
++
++    def flush(self):
++        self._writer.flush()
++
+ def generate_logdir(index, env_id, agent_id, use_env_subdir=False):
+     """Generate a log directory path based on the given parameters.
+     
+@@ -208,9 +249,11 @@ def run_opt(index, max_nepisodes, max_nsteps, agent_id, env_id, logdir, buffer_t
+     run_openai_log.info(f'Log Path: {logdir}')
+     tfb_path = os.path.join(logdir, 'metrics')
+     run_openai_log.info(f'TFB Path: {tfb_path}')
+-    file_writer = tf.summary.create_file_writer(tfb_path)
+-    tfb_path = os.path.join(logdir, 'metrics')
+-    file_writer.set_as_default()
++    uses_tf = _agent_uses_tensorflow(agent_id)
++    if uses_tf:
++        import tensorflow as tf
++        tf.random.set_seed(seed)
++    file_writer = _SummaryWriter(tfb_path, use_tensorflow=uses_tf)
+ 
+     # Agent Handling
+     agent_kwargs = {}
+@@ -251,14 +294,14 @@ def run_opt(index, max_nepisodes, max_nsteps, agent_id, env_id, logdir, buffer_t
+             episodic_reward, steps_taken = run_episode(env, agent, train=True, max_steps=max_nsteps)
+             total_nsteps += steps_taken
+             ep_reward_list.append(episodic_reward)
+-            tf.summary.scalar('Training Reward', data=episodic_reward, step=ep)
++            file_writer.scalar('Training Reward', episodic_reward, ep)
+ 
+         # Inference episode (run every episode if inference_flag, otherwise every 10 episodes)
+         if inference_flag or ep % inference_interval == 0:
+             inference_episodic_reward, _ = run_episode(env, agent, train=False, max_steps=max_nsteps)
+             inference_reward_list.append(inference_episodic_reward)
+             
+-            tf.summary.scalar('Inference Reward', data=inference_episodic_reward, step=ep)
++            file_writer.scalar('Inference Reward', inference_episodic_reward, ep)
+ 
+             # Calculate average of last nepisode_avg inference rewards
+             avg_inference_reward = np.mean(inference_reward_list[-nepisode_avg:])
+@@ -325,7 +368,14 @@ def run_episode(env, agent, train=True, max_steps=-1):
+         assert isinstance(state, np.ndarray), f"State should be a numpy array, but got {type(state)}"
+         assert state.shape == (num_states,), f"State shape should be ({num_states},), but got {state.shape}"
+ 
+-        action, _ = agent.action(tf.convert_to_tensor(state), train=train)
++        # TF agents expect a tf tensor here; torch agents convert the raw array themselves. Only
++        # touch tensorflow if it is already loaded, so torch-only runs stay TF-free (see the note
++        # at the top of this module).
++        if 'tensorflow' in sys.modules:
++            agent_input = sys.modules['tensorflow'].convert_to_tensor(state)
++        else:
++            agent_input = state
++        action, _ = agent.action(agent_input, train=train)
+ 
+         # Assert action shape
+         assert isinstance(action, np.ndarray), f"Action should be a numpy array, but got {type(action)}"
+diff --git a/jlab_opt_control/models/__init__.py b/jlab_opt_control/models/__init__.py
+index 8fa0df4..3c6f417 100644
+--- a/jlab_opt_control/models/__init__.py
++++ b/jlab_opt_control/models/__init__.py
+@@ -27,18 +27,50 @@
+ # POSSIBILITY OF SUCH DAMAGE.
+ 
+ from jlab_opt_control.models.registration import register, make, list_registered_modules
+-from jlab_opt_control.models.actor_fcnn import ActorFCNN
+-from jlab_opt_control.models.actor_gaussian_v0 import ActorGaussian
+-from jlab_opt_control.models.actor_fcnn_v2 import ActorFCNN_v2
+-from jlab_opt_control.models.critic_fcnn import CriticFCNN
+-from jlab_opt_control.models.critic_uncertainty_fcnn import CriticUncertaintyFCNN
+-from jlab_opt_control.models.critic_fcnn_v1 import CriticFCNN_v1
+-from jlab_opt_control.models.critic_fcnn_v2 import CriticFCNN_v2
+-from jlab_opt_control.models.sindy_network import SINDyNetwork
+-from jlab_opt_control.models.uqsindy_network import UQSINDyNetwork
++
++# The torch models are imported eagerly; the TF/Keras ones lazily (PEP 562 module __getattr__).
++#
++# Two reasons. First, importing TensorFlow installs CUDA stubs that break torch's CUDA detection
++# for the whole process -- see the long note in jlab_opt_control/agents/__init__.py. Second, and
++# more importantly, it lets the torch half of the toolkit run in an environment where TensorFlow
++# is not installed at all: the Isaac Lab container ships torch but no TF, and an eager import here
++# made `import jlab_opt_control` fail outright with ModuleNotFoundError. That was the blocker
++# recorded in RL_DT _docs/strategy.md Part 2 ("the package will not import in a torch-only
++# container").
++#
++# The registry resolves models by string entry point at make() time, so the Keras models remain
++# fully available and behave exactly as before -- they are simply imported on first use.
+ from jlab_opt_control.models.actor_fcnn_torch import ActorFCNNTorch
+ from jlab_opt_control.models.critic_fcnn_torch import CriticFCNNTorch
+ 
++_KERAS_MODELS = {
++    "ActorFCNN": "jlab_opt_control.models.actor_fcnn",
++    "ActorGaussian": "jlab_opt_control.models.actor_gaussian_v0",
++    "ActorFCNN_v2": "jlab_opt_control.models.actor_fcnn_v2",
++    "CriticFCNN": "jlab_opt_control.models.critic_fcnn",
++    "CriticUncertaintyFCNN": "jlab_opt_control.models.critic_uncertainty_fcnn",
++    "CriticFCNN_v1": "jlab_opt_control.models.critic_fcnn_v1",
++    "CriticFCNN_v2": "jlab_opt_control.models.critic_fcnn_v2",
++    "SINDyNetwork": "jlab_opt_control.models.sindy_network",
++    "UQSINDyNetwork": "jlab_opt_control.models.uqsindy_network",
++}
++
++
++def __getattr__(name):
++    """Import a TF/Keras model on first attribute access (PEP 562)."""
++    if name in _KERAS_MODELS:
++        import importlib
++
++        module = importlib.import_module(_KERAS_MODELS[name])
++        attr = getattr(module, name)
++        globals()[name] = attr  # cache so subsequent lookups skip this path
++        return attr
++    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
++
++
++def __dir__():
++    return sorted(list(globals()) + list(_KERAS_MODELS))
++
+ register(
+     id='actor_fcnn-v0',
+     entry_point='jlab_opt_control.models:ActorFCNN',

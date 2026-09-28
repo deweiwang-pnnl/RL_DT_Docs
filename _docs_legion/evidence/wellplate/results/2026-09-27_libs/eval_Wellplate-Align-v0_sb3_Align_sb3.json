@@ -1,0 +1,10 @@
+{
+ "task": "Wellplate-Align-v0",
+ "library": "sb3",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/sb3/Wellplate-Align-v0/2026-09-28_01-56-24/model.zip",
+ "tag": "Align_sb3",
+ "episodes": 128,
+ "rates": {
+  "time_out": 1.0
+ }
+}

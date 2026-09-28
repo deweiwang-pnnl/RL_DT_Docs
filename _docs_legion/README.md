@@ -40,10 +40,12 @@ _docs_legion/
 ├── presentations/                     one folder per meeting — 2026-09-21-wellplate-status/, 2026-09-28-weekly/ (slides)
 ├── guides/                            DIGITAL_TWIN_HOWTO.md, ISAAC_SIM_UI_GUIDE.md, SHOWING_PROGRESS.md
 ├── learn/                             learning package for the well-plate round (slides + text)
+├── evidence/                          copies of the cited results (from RL_DT), TensorBoard bundle
 └── reports/                           dated analyses: gpu-retest, isaaclab-builtin-tests, dt-via-isaaclab,
                                        comparison-isaacsim-vs-isaaclab, long-run-learning, session summaries,
                                        wellplate-round-2026-09-28
 ```
 
-The well-plate task itself (code, logs, videos, `PROGRESS.md`) lives in `RL_DT/_isaaclab_wellplate/`;
+The well-plate task's code and full logs live in `RL_DT/_isaaclab_wellplate/`; copies of every result the documents cite
+(videos, charts, READMEs, [`PROGRESS.md`](evidence/wellplate/PROGRESS.md), TensorBoard curves) are in [`evidence/`](evidence/);
 Alvika's tube task working copy in `RL_DT/_isaaclab_tuberacking/`.

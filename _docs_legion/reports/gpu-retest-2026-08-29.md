@@ -2,7 +2,7 @@
 
 Re-ran `TorchTD3-v0` on the environments recorded in
 [`PUBLICATION_MATERIALS.md`](../../_docs/PUBLICATION_MATERIALS.md), on the `trossen-ai` RTX 5090, after the
-TF/triton fix ([`../_patches/README.md`](../../../RL_DT/_patches/README.md)) made the GPU actually usable.
+TF/triton fix ([`../_patches/README.md`](../evidence/patches/README.md)) made the GPU actually usable.
 
 ## Why the old and new numbers are not directly comparable
 

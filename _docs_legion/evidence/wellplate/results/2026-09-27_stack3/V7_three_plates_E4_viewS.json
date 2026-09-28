@@ -1,0 +1,61 @@
+{
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_21-46-39_stack3a/model_23486.pt",
+ "outcomes": [
+  "success",
+  "time_out",
+  "time_out",
+  "success",
+  "success",
+  "success"
+ ],
+ "final_errors_centring_mm_twist_deg_tilt_deg": [
+  [
+   2.1,
+   1.6,
+   0.03,
+   2,
+   2.87,
+   0.89
+  ],
+  [
+   3.75,
+   1.2,
+   0.0,
+   2,
+   16.47,
+   1.69
+  ],
+  [
+   2.32,
+   3.69,
+   0.0,
+   1,
+   2.32,
+   3.69
+  ],
+  [
+   4.39,
+   0.98,
+   0.32,
+   2,
+   2.7,
+   0.81
+  ],
+  [
+   4.64,
+   0.48,
+   1.09,
+   2,
+   1.67,
+   1.15
+  ],
+  [
+   4.23,
+   1.11,
+   0.0,
+   2,
+   2.14,
+   0.03
+  ]
+ ]
+}

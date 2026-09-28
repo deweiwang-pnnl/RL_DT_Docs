@@ -1,0 +1,19 @@
+{
+ "task": "Wellplate-Stack3Handoff-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_10-59-14_centered/model_20593.pt",
+ "checkpoint2": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_17-05-30_stack3b/model_22888.pt",
+ "tag": "seq_switch_track",
+ "overrides": [
+  "env.events.reset_multi.params.phase2_prob=0.0",
+  "env.terminations.success.params.sequential=True",
+  "env.episode_length_s=30.0"
+ ],
+ "episodes": 64,
+ "rates": {
+  "time_out": 0.7031,
+  "plate_dropped": 0.2656,
+  "arm_unstable": 0.0156,
+  "success": 0.0156,
+  "success_first": 0.0
+ }
+}

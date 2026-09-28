@@ -4,8 +4,8 @@
 [`../rounds/Round-2026-09-22-wellplate-grasp-fix.md`](../rounds/Round-2026-09-22-wellplate-grasp-fix.md) · meeting
 slides: [`../presentations/2026-09-28-weekly/`](../presentations/2026-09-28-weekly/)*
 
-All paths below starting with `results/`, `PROGRESS.md`, `PLAN.md`, `run_*.sh` or `WellPlate_RL/` are in
-`RL_DT/_isaaclab_wellplate/`. `PROGRESS.md` is the complete chronology (every run, diagnosis and decision with its
+Links to `results/`, `PROGRESS.md` and `PLAN.md` open the copies in [`../evidence/wellplate/`](../evidence/wellplate/);
+`run_*.sh` and `WellPlate_RL/` are code in the `RL_DT` repo (`RL_DT/_isaaclab_wellplate/`). [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md) is the complete chronology (every run, diagnosis and decision with its
 evidence); this report is the organised version.
 
 ---
@@ -18,16 +18,16 @@ seed per run.
 
 | # | Task | Success criterion | Result | Baseline | Evidence |
 |---|---|---|---|---|---|
-| 1 | Grasp gate (scripted, before training) | plate held, lifted 10 cm | **16 / 16** | 09-20 setup: 0 | `results/2026-09-26_gripper_fix/` |
-| 2 | Align | 4 cm / 20° | **82.0 %** | — | `results/2026-09-26_summary/` |
+| 1 | Grasp gate (scripted, before training) | plate held, lifted 10 cm | **16 / 16** | 09-20 setup: 0 | [`results/2026-09-26_gripper_fix/`](../evidence/wellplate/results/2026-09-26_gripper_fix/) |
+| 2 | Align | 4 cm / 20° | **82.0 %** | — | [`results/2026-09-26_summary/`](../evidence/wellplate/results/2026-09-26_summary/) |
 | 3 | Lift | 6 cm up, tilt < 10° | **87.5 %** | 0 % (09-21) | same |
 | 4 | Stack, 2 plates | 3 cm / 1.5 cm height / 11° | **50.8 %** | 0 % | same |
-| 5 | Centred stack, 2 plates | ≤ 5 mm centring, ≤ 3° twist, ≤ 3° tilt, released, at rest | **90.6 %** | 09-26 policy: 0 % | `results/2026-09-27_centered/` |
-| 6 | E1 three plates, hand-off | each placed plate as in 5 vs the one below; lower plate stays in place | **52.3 %** | C3 alone: 0 % | `results/2026-09-27_stack3/` |
+| 5 | Centred stack, 2 plates | ≤ 5 mm centring, ≤ 3° twist, ≤ 3° tilt, released, at rest | **90.6 %** | 09-26 policy: 0 % | [`results/2026-09-27_centered/`](../evidence/wellplate/results/2026-09-27_centered/) |
+| 6 | E1 three plates, hand-off | each placed plate as in 5 vs the one below; lower plate stays in place | **52.3 %** | C3 alone: 0 % | [`results/2026-09-27_stack3/`](../evidence/wellplate/results/2026-09-27_stack3/) |
 | 7 | E2 three plates, all loose | as 6 | **46.1 %** | 26.6 % | same |
 | 8 | E3 + loose bottom plate (50 g) | as 6, bottom plate moved ≤ 1 cm | **49.2 %** | — | same |
 | 9 | E4 + realistic arm (gravity on + compensation) | as 8 | **54.7 %** | E3 gravity off 49.2 % | same |
-| 10 | E5 other libraries | Reach / Align from scratch | table in § 7 | — | `results/2026-09-27_libs/` |
+| 10 | E5 other libraries | Reach / Align from scratch | table in § 7 | — | [`results/2026-09-27_libs/`](../evidence/wellplate/results/2026-09-27_libs/) |
 
 Final policies: two-plate centred `logs/rsl_rl/wellplate/2026-09-27_10-59-14_centered/model_20593.pt` (C3); three
 plates first placement `2026-09-27_21-46-39_stack3a/model_23486.pt`, second placement
@@ -50,7 +50,7 @@ plates first placement `2026-09-27_21-46-39_stack3a/model_23486.pt`, second plac
 | Gates | every stage gated on the deterministic evaluation (≥ 40 % for centred and three-plate stages), one retry, then stop |
 
 Unattended drivers: `run_ladder_v3.sh` (align → lift → stack), `run_centered.sh` (C1a → C3), `run_stack3.sh`,
-`run_skills.sh`, `run_e3.sh`, `run_stack3_e4.sh`, `run_libs.sh` / `run_libs2.sh`. The plans they executed: `PLAN.md`
+`run_skills.sh`, `run_e3.sh`, `run_stack3_e4.sh`, `run_libs.sh` / `run_libs2.sh`. The plans they executed: [`PLAN.md`](../evidence/wellplate/PLAN.md)
 v3 (grasp fix + ladder), v4 (centred stack), v5 (three plates → libraries), each with its definition of done.
 
 ---
@@ -69,14 +69,14 @@ own setup, four defects were found — each measured before it was fixed:
 | Contact physics | under a two-sided squeeze the pads sank through the plate (one-sided push worked) | Isaac Lab's UR10e + 2F-140 contact settings (depenetration 5, max impulse 1e32, 5 mm contact offset; plate 32 solver iterations) |
 
 Gripper variant G2 (Isaac Lab's drives, mimic kept, NVIDIA colliders as shipped) + these settings held **16 of 16**
-plates, lifted 99.5 mm, tilt 0.6° (scripted grasp probe, `results/2026-09-26_gripper_fix/`, S1, V2). G1 (all finger
+plates, lifted 99.5 mm, tilt 0.6° (scripted grasp probe, [`results/2026-09-26_gripper_fix/`](../evidence/wellplate/results/2026-09-26_gripper_fix/), S1, V2). G1 (all finger
 joints driven hard) spun the plate out. Also found: the 09-20 "no colliders" conclusion rested on an invalid teleport
 test; the arm stalls ~0.3–0.4 m short of IK targets with robot gravity on and no compensation → robot gravity off
 (Dewei's decision), revisited in E4.
 
 ## 4. The ladder: align → lift → stack (09-26)
 
-`run_ladder_v3.sh`; results F4 in `results/2026-09-26_summary/`. What it took, each confirmed by a measurement:
+`run_ladder_v3.sh`; results F4 in [`results/2026-09-26_summary/`](../evidence/wellplate/results/2026-09-26_summary/). What it took, each confirmed by a measurement:
 
 - **Gate on the deterministic evaluation.** With a binary gripper, exploration noise flips the grip open; lift training
   success read 19.9 % while the deterministic policy lifted 87.5 %.
@@ -104,7 +104,7 @@ The 09-26 stack policy scored 0 % at these criteria (median twist 73°, mostly s
 
 Curriculum results (deterministic): C1a 67.2 % · C1b 67.2 % · C1c 73.4 % · C1 85.2 % · C2 (10 mm / 5° / 3°) 87.5 % ·
 **C3 (5 mm / 3° / 3°) 90.6 %**. Successful episodes: median 2.4 mm, 0.9° twist, 0.0° tilt. Evidence
-`results/2026-09-27_centered/` (F5 per-episode errors before/after, F6 stages, V5 before/after video).
+[`results/2026-09-27_centered/`](../evidence/wellplate/results/2026-09-27_centered/) (F5 per-episode errors before/after, F6 stages, V5 before/after video).
 
 ## 6. Three plates, loose bottom plate, realistic arm (plan v5, 09-27)
 
@@ -146,7 +146,7 @@ dynamics as feed-forward efforts (arm and gripper joints). IK tracking after 300
 gravity on without compensation 434 mm; with compensation 0.0 mm. The E3 policies unchanged on the gravity-on arm:
 **54.7 %**.
 
-Evidence: `results/2026-09-27_stack3/` (README, F7 results, F8 curricula, V6 overview video, V7 close-up,
+Evidence: [`results/2026-09-27_stack3/`](../evidence/wellplate/results/2026-09-27_stack3/) (README, F7 results, F8 curricula, V6 overview video, V7 close-up,
 `stages.md` with every stage and checkpoint, `eval_*` including the diagnostics named above).
 
 ## 7. Other libraries (E5, 09-27 → 09-28)

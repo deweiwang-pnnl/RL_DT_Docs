@@ -1,0 +1,17 @@
+{
+ "task": "Wellplate-Stack-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_02-29-31_stack/model_10790.pt",
+ "tag": "recheck_final",
+ "overrides": [
+  "env.terminations.success.params.xy_tol=0.03",
+  "env.terminations.success.params.z_tol=0.015",
+  "env.terminations.success.params.min_level=0.98"
+ ],
+ "episodes": 128,
+ "rates": {
+  "time_out": 0.3672,
+  "plate_dropped": 0.125,
+  "arm_unstable": 0.0,
+  "success": 0.5078
+ }
+}

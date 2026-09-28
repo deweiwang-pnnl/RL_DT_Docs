@@ -194,8 +194,23 @@ copied into `presentations/2026-09-28-weekly/`.
 
 **Why:** the round's commits carried 4 GB of checkpoints (3.8 GB of them intermediate rsl_rl checkpoints) and the
 push to PNNL GitLab failed mid-upload; the checkpoints behind reported results are cited by path in the results
-READMEs, `stages.md` and `PROGRESS.md`, and stay on the Legion laptop. The push shrank to 176 MB.
+READMEs, `stages.md` and [`PROGRESS.md`](evidence/wellplate/PROGRESS.md), and stay on the Legion laptop. The push shrank to 176 MB.
 
 **Rules out:** reloading a trained policy from a git clone on another machine — copy the cited checkpoint by hand.
 Supersedes the 2026-09-14 "track everything in RL_DT" rule for `_isaaclab_wellplate/`; files already pushed before
 09-28 remain in GitLab's history.
+
+## 2026-09-28 — Two repos, two roles: RL_DT the detailed record, RL_DT_docs self-contained (Dewei)
+
+**Chose:** `RL_DT` tracks everything except logs useless for presenting or checking — so text logs (driver, training,
+evaluation) and TensorBoard event files are tracked again (+405 MB); checkpoints, training-time videos and Hydra
+`outputs/` stay ignored (entry above). `RL_DT_docs` tracks everything and never links into `RL_DT`: every result a
+document cites is copied into `_docs_legion/evidence/` (well-plate results, `PROGRESS.md`, `PLAN.md`, a 40-run
+TensorBoard bundle, the tube-racking run, the TF/Triton patch), and presentation folders carry their own stills and
+videos.
+
+**Why:** the docs are what gets shared and presented; they must open on any machine from one clone. The code repo is
+the full record for anyone checking a number.
+
+**Rules out:** docs links that only work with both repos side by side. **Cost:** results are duplicated (≈ 250 MB in
+the docs repo) and must be refreshed when they change — `evidence/README.md` has the two commands.

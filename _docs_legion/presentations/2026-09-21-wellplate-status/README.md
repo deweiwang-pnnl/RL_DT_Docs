@@ -1,6 +1,6 @@
 # Well-plate task in Isaac Lab — status for the 2026-09-21 meeting
 
-*Dewei Wang · Legion laptop (RTX 5090) · everything referenced here is in `RL_DT/_isaaclab_wellplate/`*
+*Dewei Wang · Legion laptop (RTX 5090) · results referenced here are copied in [`../../evidence/wellplate/`](../../evidence/wellplate/); code in the `RL_DT` repo*
 
 ## 1. What the task is
 
@@ -83,7 +83,7 @@ RL_Twin/
 
 **Open (the blocker for stage 3):** with Martin's converted 2F-140 the fingertips sweep an arc and land
 on the plate's top face during closing; the drives cannot hold the pads parallel under contact
-(`results/gripper_short_side_tips_on_top_22-50.png`). The policy does its part — hovers within 5 mm,
+([`results/gripper_short_side_tips_on_top_22-50.png`](../../evidence/wellplate/results/gripper_short_side_tips_on_top_22-50.png)). The policy does its part — hovers within 5 mm,
 aligns, closes at the plate 68–100 % of the time — but no plate was ever lifted in hand across eight
 lift runs.
 
@@ -101,11 +101,11 @@ lift runs.
 ## 6. Videos — where, and how to make more
 
 Presentation set (rendered 09-21 morning, corrected camera and lighting):
-`RL_DT/_isaaclab_wellplate/results/2026-09-21_presentation/`
+[`results/2026-09-21_presentation/`](../../evidence/wellplate/results/2026-09-21_presentation/)
 `reach_viewA.mp4` · `reach_viewD.mp4` · `align_viewA.mp4` · `align_viewD.mp4` · `lift_viewA.mp4` ·
 `lift_viewD.mp4` (+ `_mid.png` / `_end.png` frames). View A = oblique over the table (4 envs),
 view D = close-up of the gripper (1 env). Per-stage training clips and replays are in
-`results/<date>_<stage>/`; the gripper diagnosis frames are `results/gripper_*.png`.
+[`results/<date>_<stage>/`](../../evidence/wellplate/results/); the gripper diagnosis frames are [`results/gripper_*.png`](../../evidence/wellplate/results/).
 Playback: Firefox/Chrome or VS Code (GNOME Videos lacks H.264).
 
 Two problems in the first videos, both fixed: (a) the camera looked at world coordinates while
@@ -137,7 +137,7 @@ shaping term is doing the work — e.g. `grasp_ready` vs `lifting` was the lift 
 
 - **Martin:** 2F-140 USD — no mesh colliders, loop-closure joints dropped, `AssemblerFixedJoint.body0`
   wrong, gripper ~25 cm off the flange; `WellPlates.usd` payloads an unloadable `.fbx`; the plate prim
-  frame vs physics frame are yawed 90°. Frames in `results/gripper_*.png`.
+  frame vs physics frame are yawed 90°. Frames in [`results/gripper_*.png`](../../evidence/wellplate/results/).
 - **Alvika:** FrameTransformer with several targets does not keep config order; success-as-terminal
   penalises success once shaping is dense — both apply to the tube task; `fix_gripper_weld.py` patches
   Martin's file in place, better upstream.

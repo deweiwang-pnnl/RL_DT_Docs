@@ -1,0 +1,17 @@
+{
+ "task": "Wellplate-Centered-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_08-06-42_centered/model_15198.pt",
+ "tag": "C1a_stage",
+ "overrides": [
+  "env.terminations.success.params.xy_tol=0.0150",
+  "env.terminations.success.params.yaw_tol_deg=45.0",
+  "env.terminations.success.params.min_level=0.996195"
+ ],
+ "episodes": 128,
+ "rates": {
+  "time_out": 0.25,
+  "plate_dropped": 0.0781,
+  "arm_unstable": 0.0,
+  "success": 0.6719
+ }
+}

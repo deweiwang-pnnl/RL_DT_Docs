@@ -1,0 +1,12 @@
+ Learning iteration 998/1298 | Mean reward: 0.08| Episode_Termination/plate_dropped: 0.0000| Episode_Termination/success: 0.0000
+ Learning iteration 1023/1298 | Mean reward: 3.49| Episode_Termination/plate_dropped: 0.0000| Episode_Termination/success: 0.0000
+ Learning iteration 1048/1298 | Mean reward: 3.48| Episode_Termination/plate_dropped: 0.0000| Episode_Termination/success: 0.0398
+ Learning iteration 1073/1298 | Mean reward: 2.30| Episode_Termination/plate_dropped: 0.0020| Episode_Termination/success: 0.6247
+ Learning iteration 1098/1298 | Mean reward: 1.85| Episode_Termination/plate_dropped: 0.0000| Episode_Termination/success: 0.7005
+ Learning iteration 1123/1298 | Mean reward: 1.85| Episode_Termination/plate_dropped: 0.0000| Episode_Termination/success: 0.6758
+ Learning iteration 1148/1298 | Mean reward: 1.95| Episode_Termination/plate_dropped: 0.0000| Episode_Termination/success: 0.6191
+ Learning iteration 1173/1298 | Mean reward: 2.16| Episode_Termination/plate_dropped: 0.0037| Episode_Termination/success: 0.5677
+ Learning iteration 1198/1298 | Mean reward: 1.93| Episode_Termination/plate_dropped: 0.0000| Episode_Termination/success: 0.6599
+ Learning iteration 1223/1298 | Mean reward: 2.21| Episode_Termination/plate_dropped: 0.0020| Episode_Termination/success: 0.6073
+ Learning iteration 1248/1298 | Mean reward: 1.90| Episode_Termination/plate_dropped: 0.0039| Episode_Termination/success: 0.7712
+ Learning iteration 1273/1298 | Mean reward: 1.35| Episode_Termination/plate_dropped: 0.0020| Episode_Termination/success: 0.8471

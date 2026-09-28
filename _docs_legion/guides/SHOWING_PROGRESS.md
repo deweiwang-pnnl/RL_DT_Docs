@@ -5,15 +5,13 @@ curves in TensorBoard — from the work computer, or live from the Legion laptop
 
 ## 0. Before the meeting (10 minutes)
 
-1. Sync `RL_DT_docs`. The slides folder `_docs_legion/presentations/2026-09-28-weekly/` is self-contained: stills in
-   `assets/`, the nine presentable videos in `videos/`. (The same videos, and every other recording, are also in
-   `RL_DT/_isaaclab_wellplate/results/`.)
-2. Copy the TensorBoard bundle `RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz` (14 MB, **not in git** — the
-   logs are git-ignored) from the Legion laptop, e.g. `scp aidev@trossen-ai:RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz .`
-   or a USB stick.
-3. Open `RL_DT_docs/_docs_legion/presentations/2026-09-28-weekly/slides.html` in Chrome / Edge / Firefox and click
-   through once: every video should show a poster frame and play. If one does not, open it from `videos/` directly.
-4. Start TensorBoard (§ 3) in a second window, so it is ready when someone asks "how did training go?".
+1. Sync `RL_DT_docs` — it is self-contained. The slides folder `_docs_legion/presentations/2026-09-28-weekly/` has
+   its stills in `assets/` and the nine presentable videos in `videos/`; every other recording and chart is in
+   [`../evidence/wellplate/results/`](../evidence/wellplate/results/), the TensorBoard curves in
+   [`../evidence/wellplate/tensorboard/`](../evidence/wellplate/tensorboard/). Nothing here needs the `RL_DT` repo.
+2. Open `_docs_legion/presentations/2026-09-28-weekly/slides.html` in Chrome / Edge / Firefox and click through
+   once: every video should show a poster frame and play. If one does not, open it from `videos/` directly.
+3. Start TensorBoard (§ 3) in a second window, so it is ready when someone asks "how did training go?".
 
 ## 1. The slides
 
@@ -29,18 +27,18 @@ from ~0:00, point at the right side) → 9–11 (three plates, play V6 at 1:07) 
 
 ## 2. The recordings
 
-In `presentations/2026-09-28-weekly/videos/` (copies) and `RL_DT/_isaaclab_wellplate/results/` (originals, paths below). Every labelled video carries a caption per episode with its outcome and
+In `presentations/2026-09-28-weekly/videos/` and, with every other recording, in `../evidence/wellplate/results/` (paths below). Every labelled video carries a caption per episode with its outcome and
 the final errors, so the team can read what they see.
 
 | Video | Length | What it shows | Where to look |
 |---|---|---|---|
-| `2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4` | 22 s | the same scripted grasp with the 09-20 gripper setup (left) and the fixed one (right) | left: pads never hold, plate stays; right: lifted 10 cm |
-| `2026-09-26_gripper_fix/V1_sweep_G0_vs_G1.mp4` | 14 s | gripper closing in the air, old vs fixed pad joint | left pads bend into a V; right stay parallel |
-| `2026-09-26_summary/V3_lift_before_after_viewA.mp4` | 15 s | lift policy before (09-20) and after the fix | before: nothing lifted |
-| `2026-09-26_summary/V4_stack_8_episodes_labelled.mp4` | 60 s | 2-plate stack, 8 consecutive episodes | captions say success / time-out per episode |
-| `2026-09-27_centered/V5_centred_before_vs_after.mp4` | 101 s | 8 episodes each: 09-26 stack policy vs the centred policy | right side: 8/8 centred within ~17 s, then it holds the last frame; left: twisted plates, time-outs |
-| `2026-09-27_stack3/V6_three_plates_E4_viewT.mp4` | 97 s | **final setting**: three loose plates, loose bottom plate, realistic arm; 6 episodes, overview | **0:00–0:06** episode 1 (fast success); **1:07–1:15** episode 4, the cleanest full sequence; episode 2 shows a failure (middle plate pushed 16 mm) |
-| `2026-09-27_stack3/V7_three_plates_E4_viewS.mp4` | 97 s | the same, close-up of the stack | 1:10 white plate centred on the black one; 1:14 yellow on top |
+| [`2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4`](../evidence/wellplate/results/2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4) | 22 s | the same scripted grasp with the 09-20 gripper setup (left) and the fixed one (right) | left: pads never hold, plate stays; right: lifted 10 cm |
+| [`2026-09-26_gripper_fix/V1_sweep_G0_vs_G1.mp4`](../evidence/wellplate/results/2026-09-26_gripper_fix/V1_sweep_G0_vs_G1.mp4) | 14 s | gripper closing in the air, old vs fixed pad joint | left pads bend into a V; right stay parallel |
+| [`2026-09-26_summary/V3_lift_before_after_viewA.mp4`](../evidence/wellplate/results/2026-09-26_summary/V3_lift_before_after_viewA.mp4) | 15 s | lift policy before (09-20) and after the fix | before: nothing lifted |
+| [`2026-09-26_summary/V4_stack_8_episodes_labelled.mp4`](../evidence/wellplate/results/2026-09-26_summary/V4_stack_8_episodes_labelled.mp4) | 60 s | 2-plate stack, 8 consecutive episodes | captions say success / time-out per episode |
+| [`2026-09-27_centered/V5_centred_before_vs_after.mp4`](../evidence/wellplate/results/2026-09-27_centered/V5_centred_before_vs_after.mp4) | 101 s | 8 episodes each: 09-26 stack policy vs the centred policy | right side: 8/8 centred within ~17 s, then it holds the last frame; left: twisted plates, time-outs |
+| [`2026-09-27_stack3/V6_three_plates_E4_viewT.mp4`](../evidence/wellplate/results/2026-09-27_stack3/V6_three_plates_E4_viewT.mp4) | 97 s | **final setting**: three loose plates, loose bottom plate, realistic arm; 6 episodes, overview | **0:00–0:06** episode 1 (fast success); **1:07–1:15** episode 4, the cleanest full sequence; episode 2 shows a failure (middle plate pushed 16 mm) |
+| [`2026-09-27_stack3/V7_three_plates_E4_viewS.mp4`](../evidence/wellplate/results/2026-09-27_stack3/V7_three_plates_E4_viewS.mp4) | 97 s | the same, close-up of the stack | 1:10 white plate centred on the black one; 1:14 yellow on top |
 
 The bottom plate renders **black** (same mesh as the others; cause not checked) — mention it before someone asks.
 
@@ -57,17 +55,17 @@ Views: `A` oblique, `S` stack close-up, `T` three-plate overview (defined in `sc
 
 ## 3. TensorBoard
 
-### A. On the work computer (from the bundle)
+### A. On any computer (from this repo)
 
 ```powershell
-# PowerShell, in the folder where the bundle was copied
-tar -xzf tensorboard_wellplate_2026-09-28.tar.gz
+# PowerShell or bash, from RL_DT_docs/_docs_legion/
 python -m pip install tensorboard          # once
-tensorboard --logdir tensorboard_wellplate_2026-09-28 --port 6006
+tensorboard --logdir evidence/wellplate/tensorboard --port 6006
 # open http://localhost:6006
 ```
 
-The bundle has 40 runs (event files only, no checkpoints); its `README.md` maps each folder to a stage.
+The folder holds the 40 runs behind the reported results (event files only); its `README.md` maps each folder to a
+stage.
 
 ### B. Live, on the Legion laptop (all 4.6 GB of logs)
 
@@ -91,14 +89,14 @@ In the **Scalars** tab set smoothing to ~0.9, then use the run filter (left) wit
 | Library comparison | `_e5_align$` and skrl `ppo_torch` | `Loss/learning_rate` (rsl_rl), `Learning / Learning rate` (skrl) | rsl_rl's adaptive rate at its 1e-5 floor vs skrl's ~1e-4 — tested, **not** the explanation |
 
 A static version of the key curves (for slides and for people without TensorBoard):
-`RL_DT/_isaaclab_wellplate/results/2026-09-28_presentation/T1_training_curves.png`, with the CSVs in `curves/`.
+[`results/2026-09-28_presentation/T1_training_curves.png`](../evidence/wellplate/results/2026-09-28_presentation/T1_training_curves.png), with the CSVs in `curves/`.
 
 ## 4. If someone asks for a number
 
 | Question | Answer and source |
 |---|---|
-| "How precise is the stack?" | 2-plate: median 2.4 mm / 0.9° / 0.0° (`results/2026-09-27_centered/README.md`) |
-| "How often does the three-plate stack work?" | 54.7 % in the final setting; 36 % time-outs, 9 % drops (`results/2026-09-27_stack3/README.md`) |
+| "How precise is the stack?" | 2-plate: median 2.4 mm / 0.9° / 0.0° ([`results/2026-09-27_centered/README.md`](../evidence/wellplate/results/2026-09-27_centered/README.md)) |
+| "How often does the three-plate stack work?" | 54.7 % in the final setting; 36 % time-outs, 9 % drops ([`results/2026-09-27_stack3/README.md`](../evidence/wellplate/results/2026-09-27_stack3/README.md)) |
 | "Is it repeatable?" | One seed per run so far — the next thing to add |
 | "What was actually wrong with the gripper?" | § 3 of `reports/wellplate-round-2026-09-28.md` |
 | "Why two policies?" | one policy forgot the first placement (swap test) — report § 6, E1 |

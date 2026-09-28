@@ -7,7 +7,7 @@
 <!--
   Offline slide deck (no internet needed). Open in any browser.
   Keys: → / Space / PageDown next · ← / PageUp previous · Home / End · F fullscreen · P or Ctrl+P prints one slide per page.
-  Videos play from ./videos/ next to this file (copies of the curated videos in RL_DT/_isaaclab_wellplate/results/),
+  Videos play from ./videos/ next to this file (copies of the curated videos; all results are copied in ../../evidence/),
   so this folder is self-contained. If a video does not load, open the file named under it.
 -->
 <style>
@@ -69,7 +69,7 @@
     <div class="col w40" style="justify-content:center">
       <p>Dewei Wang · Legion laptop (RTX 5090)</p>
       <p class="note">Robot: Martin's Ridgeback + UR7e + Robotiq 2F-140 · Scene: Martin's <span class="tag">WellPlates.usd</span> · PPO (rsl_rl), 512 parallel envs</p>
-      <p class="note">Code and evidence: <span class="tag">RL_DT/_isaaclab_wellplate/</span> · Docs: <span class="tag">RL_DT_docs/_docs_legion/</span></p>
+      <p class="note">Evidence: <span class="tag">RL_DT_docs/_docs_legion/evidence/</span> · Code: <span class="tag">RL_DT/_isaaclab_wellplate/</span></p>
     </div>
   </div>
   <div class="foot">1</div>
@@ -106,7 +106,7 @@
     <tr><td>09-27</td><td>Plan v5: three plates (hand-off, all loose), loose bottom plate, realistic arm</td><td class="ok">52 / 46 / 49 / 55 %</td></tr>
     <tr><td>09-27/28</td><td>Plan v5 E5: skrl, rl_games, Stable-Baselines3 on the same tasks</td><td>comparison</td></tr>
   </table>
-  <p class="note" style="margin-top:.8em">Unattended runs, driven by scripts that gate each stage on a deterministic evaluation, retry once, and stop for diagnosis. Every decision is logged in <span class="tag">PROGRESS.md</span>.</p>
+  <p class="note" style="margin-top:.8em">Unattended runs, driven by scripts that gate each stage on a deterministic evaluation, retry once, and stop for diagnosis. Every decision is logged in <a href="../../evidence/wellplate/PROGRESS.md">PROGRESS.md</a>.</p>
   <div class="foot">3</div>
 </section>
 
@@ -356,18 +356,19 @@
 <!-- 17 -->
 <section class="slide">
   <div class="kicker">Backup</div>
-  <h2>Where the evidence is</h2>
+  <h2>Where the evidence is — copies in this repo (<span class="tag">_docs_legion/evidence/</span>)</h2>
   <table>
-    <tr><th>What</th><th>Where (all under RL_DT/_isaaclab_wellplate/)</th></tr>
-    <tr><td>Chronology, every decision with evidence</td><td class="path">PROGRESS.md · PLAN.md (v3 → v5)</td></tr>
-    <tr><td>Gripper fix</td><td class="path">results/2026-09-26_gripper_fix/ (README, F1–F3, V1, V2)</td></tr>
-    <tr><td>Ladder align / lift / stack</td><td class="path">results/2026-09-26_summary/ (F4, V3, V4)</td></tr>
-    <tr><td>Centred stacking</td><td class="path">results/2026-09-27_centered/ (README, F5, F6, V5)</td></tr>
-    <tr><td>Three plates, loose bottom, realistic arm</td><td class="path">results/2026-09-27_stack3/ (README, F7, F8, V6, V7, stages.md)</td></tr>
-    <tr><td>Library comparison</td><td class="path">results/2026-09-27_libs/ (README, F9, libs.md)</td></tr>
-    <tr><td>Training curves / TensorBoard</td><td class="path">results/2026-09-28_presentation/T1 · RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz</td></tr>
-    <tr><td>Detailed report · how to demo · learning package</td><td class="path">RL_DT_docs/_docs_legion/reports/wellplate-round-2026-09-28.md · guides/SHOWING_PROGRESS.md · learn/</td></tr>
+    <tr><th>What</th><th>Where</th></tr>
+    <tr><td>Chronology, every decision with evidence</td><td><a href="../../evidence/wellplate/PROGRESS.md">PROGRESS.md</a> · <a href="../../evidence/wellplate/PLAN.md">PLAN.md</a> (v3 → v5)</td></tr>
+    <tr><td>Gripper fix</td><td><a href="../../evidence/wellplate/results/2026-09-26_gripper_fix/">results/2026-09-26_gripper_fix/</a></td></tr>
+    <tr><td>Ladder align / lift / stack</td><td><a href="../../evidence/wellplate/results/2026-09-26_summary/">results/2026-09-26_summary/</a></td></tr>
+    <tr><td>Centred stacking</td><td><a href="../../evidence/wellplate/results/2026-09-27_centered/">results/2026-09-27_centered/</a></td></tr>
+    <tr><td>Three plates, loose bottom, realistic arm</td><td><a href="../../evidence/wellplate/results/2026-09-27_stack3/">results/2026-09-27_stack3/</a></td></tr>
+    <tr><td>Library comparison</td><td><a href="../../evidence/wellplate/results/2026-09-27_libs/">results/2026-09-27_libs/</a></td></tr>
+    <tr><td>Training curves / TensorBoard</td><td><a href="../../evidence/wellplate/results/2026-09-28_presentation/">results/2026-09-28_presentation/</a> · <a href="../../evidence/wellplate/tensorboard/">tensorboard/</a></td></tr>
+    <tr><td>Detailed report · how to demo · learning package</td><td><a href="../../reports/wellplate-round-2026-09-28.md">report</a> · <a href="../../guides/SHOWING_PROGRESS.md">guide</a> · <a href="../../learn/">learn/</a></td></tr>
   </table>
+  <p class="note" style="margin-top:.8em">Code and full logs: the <span class="tag">RL_DT</span> repo (PNNL GitLab), <span class="tag">_isaaclab_wellplate/</span>.</p>
   <div class="foot">17</div>
 </section>
 

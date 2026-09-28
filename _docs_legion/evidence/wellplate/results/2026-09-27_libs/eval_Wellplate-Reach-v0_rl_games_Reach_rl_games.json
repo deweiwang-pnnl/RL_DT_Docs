@@ -1,0 +1,10 @@
+{
+ "task": "Wellplate-Reach-v0",
+ "library": "rl_games",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rl_games/wellplate/2026-09-27_23-45-19/nn/last_wellplate_ep_500_rew__0.40663612_.pth",
+ "tag": "Reach_rl_games",
+ "episodes": 128,
+ "rates": {
+  "success": 1.0
+ }
+}

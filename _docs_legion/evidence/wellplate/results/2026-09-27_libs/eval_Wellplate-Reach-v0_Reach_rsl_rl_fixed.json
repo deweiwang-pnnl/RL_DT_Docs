@@ -1,0 +1,14 @@
+{
+ "task": "Wellplate-Reach-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-28_02-33-03_e5f_reach/model_499.pt",
+ "checkpoint2": null,
+ "tag": "Reach_rsl_rl_fixed",
+ "overrides": [],
+ "episodes": 128,
+ "rates": {
+  "time_out": 0.0,
+  "plate_dropped": 0.0,
+  "arm_unstable": 0.0,
+  "success": 1.0
+ }
+}

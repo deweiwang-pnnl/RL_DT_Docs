@@ -1,0 +1,55 @@
+{
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_10-59-14_centered/model_20593.pt",
+ "outcomes": [
+  "success",
+  "success",
+  "success",
+  "success",
+  "success",
+  "success",
+  "success",
+  "success"
+ ],
+ "final_errors_centring_mm_twist_deg_tilt_deg": [
+  [
+   1.06,
+   1.16,
+   0.09
+  ],
+  [
+   3.16,
+   2.64,
+   0.0
+  ],
+  [
+   4.26,
+   3.83,
+   0.03
+  ],
+  [
+   0.91,
+   0.47,
+   0.05
+  ],
+  [
+   4.14,
+   0.83,
+   0.0
+  ],
+  [
+   0.42,
+   0.36,
+   0.02
+  ],
+  [
+   2.89,
+   0.84,
+   0.0
+  ],
+  [
+   3.01,
+   0.35,
+   0.0
+  ]
+ ]
+}

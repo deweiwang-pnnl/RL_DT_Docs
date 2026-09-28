@@ -1,0 +1,17 @@
+{
+ "task": "Wellplate-Align-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-26_19-42-36_align/model_1297.pt",
+ "tag": "strict",
+ "overrides": [
+  "env.terminations.success.params.threshold=0.02",
+  "env.terminations.success.params.min_down=0.966",
+  "env.terminations.success.params.min_align=0.985"
+ ],
+ "episodes": 128,
+ "rates": {
+  "time_out": 1.0,
+  "plate_dropped": 0.0,
+  "arm_unstable": 0.0,
+  "success": 0.0
+ }
+}

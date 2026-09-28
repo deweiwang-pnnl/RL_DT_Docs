@@ -97,11 +97,13 @@ Disk: 1.9 TB total, ~1.3 TB free (2026-09-28).
   `docker exec -e DISPLAY= isaac-lab-tuberacking bash -c "cd /workspace/isaaclab/dw_wellplate/WellPlate_RL && /workspace/isaaclab/isaaclab.sh -p scripts/…"`.
 - **RL libraries in the container:** rsl_rl 5.0.1, skrl 2.1.0, rl_games 1.6.1, Stable-Baselines3 2.9.0 (no installs
   were needed).
-- **Logs and checkpoints:** `RL_DT/_isaaclab_wellplate/WellPlate_RL/logs/` (4.6 GB on 09-28), git-ignored. Files
+- **Logs and checkpoints:** `RL_DT/_isaaclab_wellplate/WellPlate_RL/logs/` (4.6 GB on 09-28). Since 09-28 RL_DT tracks
+  run `params/*.yaml`, TensorBoard event files and all text logs; checkpoints, training-time videos and Hydra
+  `outputs/` are git-ignored and stay on this disk. Files
   written by the container are owned by root; `docker exec … chown` before editing them from the host.
 - **TensorBoard:** `~/RL_Twin/SciOptControlToolkit/.venv/bin/tensorboard --logdir <logs> --port 6006`; from
-  elsewhere `ssh -L 6006:localhost:6006 aidev@trossen-ai`. A curated 40-run bundle for other machines:
-  `_exports/tensorboard_wellplate_2026-09-28.tar.gz`. How to present: [`guides/SHOWING_PROGRESS.md`](guides/SHOWING_PROGRESS.md).
+  elsewhere `ssh -L 6006:localhost:6006 aidev@trossen-ai`. A curated 40-run bundle, tracked in the docs repo:
+  [`evidence/wellplate/tensorboard/`](evidence/wellplate/tensorboard/). How to present: [`guides/SHOWING_PROGRESS.md`](guides/SHOWING_PROGRESS.md).
 - **Headless screenshots of HTML slides:** `google-chrome --headless=new --screenshot=… file://…/slides.html#N`.
 
 ## Python and the toolkit

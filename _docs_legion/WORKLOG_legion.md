@@ -81,8 +81,8 @@ self-contained robot USD. Questions are in [`team-discussion_legion.md`](team-di
 | [`reports/wellplate-round-2026-09-28.md`](reports/wellplate-round-2026-09-28.md) | The detailed report with every result, diagnosis and evidence path |
 | [`guides/SHOWING_PROGRESS.md`](guides/SHOWING_PROGRESS.md) | How to show the recordings (with timestamps) and TensorBoard |
 | [`learn/`](learn/) | Learning package: seven parts with check-yourself questions, plus slides |
-| `RL_DT/_isaaclab_wellplate/` `PROGRESS.md`, `PLAN.md` v3–v5, `results/2026-09-2{6,7,8}_*` | Chronology, plans, evidence (videos, charts, evaluation JSONs) |
-| `RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz` (**not in git**) | 40 runs' event files, 14 MB |
+| [`evidence/`](evidence/) — [`PROGRESS.md`](evidence/wellplate/PROGRESS.md), [`PLAN.md`](evidence/wellplate/PLAN.md) v3–v5, [`results/`](evidence/wellplate/results/) | Copies of the chronology, plans and evidence (videos, charts, evaluation JSONs) from `RL_DT` |
+| [`evidence/wellplate/tensorboard/`](evidence/wellplate/tensorboard/) | 40 runs' TensorBoard event files (56 MB) |
 
 ## 2026-08-30 → 08-31 — Do the routes actually learn? No, and here is why
 
@@ -124,7 +124,7 @@ it was making the toolkit run at all.
   TensorFlow/Triton native-library conflict — whichever loads second crashes — plus a silent second
   symptom where importing TF makes torch stop seeing the GPU. Fixed in 5 files; the Keras agents were
   regression-tested and still train. [D1](PUBLICATION_MATERIALS_legion.md#d1),
-  patch in [`../_patches/`](../../RL_DT/_patches/README.md). **An initial diagnosis blaming an upstream
+  patch in [`../_patches/`](evidence/patches/README.md). **An initial diagnosis blaming an upstream
   PyTorch/Blackwell bug was wrong** and is recorded as such.
 - **Side effect worth more than the fix:** the lazy-import work cleared the blocker in
   [`strategy.md`](../_docs/strategy.md) Part 2 — the package now imports in a torch-only container, which is

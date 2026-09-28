@@ -202,7 +202,7 @@ Deterministic evaluation, 128 episodes per number, 2026-09-26.
 | Stack, 2 plates | 3 cm / 1.5 cm / 11° | **50.8 %** | 1 cm / 5 mm / 5° | 22.7 % |
 
 On 09-20/21 lift and stack were 0 % (no plate ever lifted). Preconditions: [D12](#d12), [D13](#d13) fixed; the grasp
-held 16/16 in a scripted gate before training. Evidence: `RL_DT/_isaaclab_wellplate/results/2026-09-26_summary/`
+held 16/16 in a scripted gate before training. Evidence: [`results/2026-09-26_summary/`](evidence/wellplate/results/2026-09-26_summary/)
 (F4, V3, V4). **Why it matters:** the first plate lifted and stacked in this twin.
 
 ### R8 — Centred 2-plate stack, 90.6 % {#r8}
@@ -216,7 +216,7 @@ Curriculum, each stage warm-started from the previous, deterministic, 128 episod
 
 Successful episodes: median 2.4 mm centring, 0.9° twist, 0.0° tilt. The 09-26 stack policy scores **0 %** at C3
 criteria (median twist 73°). Made learnable by a twist observation, the curriculum and [M4](#m4). Evidence:
-`results/2026-09-27_centered/` (F5 per-episode errors, F6, V5). **Why it matters:** precision placement, not only
+[`results/2026-09-27_centered/`](evidence/wellplate/results/2026-09-27_centered/) (F5 per-episode errors, F6, V5). **Why it matters:** precision placement, not only
 contact — the tolerances of a real plate stack.
 
 ### R9 — Three plates, loose bottom plate {#r9}
@@ -234,7 +234,7 @@ deterministic, 128 episodes. Two policies (first / second placement, [M5](#m5)).
 Curricula: second placement with a kinematic middle plate rising 0 / 6.5 / 13 / 19.5 / 26 mm: 80.5 / 70.3 / 82.8 /
 92.2 / **91.4 %** (trained at full height directly: **0.8 %**). First placement onto a loose bottom plate, mass
 20 kg → 2 → 0.5 → 0.15 kg → 50 g: 82.8 / 60.2 / 50.8 / 49.2 / **61.7 %** (untrained at 50 g: 11.7 %). Final setting
-failures: 36 % time-outs, 9 % drops. Evidence: `results/2026-09-27_stack3/` (F7, F8, V6, V7, `stages.md`).
+failures: 36 % time-outs, 9 % drops. Evidence: [`results/2026-09-27_stack3/`](evidence/wellplate/results/2026-09-27_stack3/) (F7, F8, V6, V7, `stages.md`).
 **Why it matters:** sequential multi-object manipulation with loose objects, and a measured account of what made
 each hard part learnable.
 
@@ -257,7 +257,7 @@ From scratch, 512 envs, same env-step budget, one shared deterministic evaluatio
 
 The skrl PPO advantage on Align is **unexplained** ([D15](#d15) was tested and rejected as the cause). SB3 PPO (fixed
 rate + KL early stop) and skrl SAC (one gradient step per 512 env steps) look under-configured — not a verdict.
-Evidence: `results/2026-09-27_libs/` (README, F9, `libs.md`). **Why it matters:** the library changed the outcome on
+Evidence: [`results/2026-09-27_libs/`](evidence/wellplate/results/2026-09-27_libs/) (README, F9, `libs.md`). **Why it matters:** the library changed the outcome on
 an identical task; worth a controlled follow-up (value normalisation, 3 seeds) before choosing one.
 
 ---
@@ -421,7 +421,7 @@ Our gripper action drove `*_inner_finger_pad_joint` to 0 — a ratio copied from
 is a fixed pad mount. In NVIDIA's USD (`Robotiq_2F_140_physics_edit`) that joint closes the four-bar loop
 (inner_finger → inner_knuckle) and must follow +q, as Isaac Lab's `set_finger_joint_pos_robotiq_2f140` does. Effect:
 the drives fought the linkage and the pads tilted into a V — 12° at the 85 mm contact, 24° closed; with +q, 0.0°.
-Evidence: `results/2026-09-26_gripper_fix/` (F2, V1). Ours, not the asset's; it blocked every lift since 09-20.
+Evidence: [`results/2026-09-26_gripper_fix/`](evidence/wellplate/results/2026-09-26_gripper_fix/) (F2, V1). Ours, not the asset's; it blocked every lift since 09-20.
 
 ### D13 — Gripper closing axis wrong since 09-20 {#d13}
 
@@ -497,7 +497,7 @@ ever have stopped it.
 
 Training logs measure success **with exploration noise**; with a binary gripper, noise crossing zero opens the grip
 at random. Lift: training 19.9 %, deterministic 87.5 %. Within the centred and three-plate stages training success
-often falls while the deterministic evaluation rises (chart `results/2026-09-28_presentation/T1_training_curves.png`).
+often falls while the deterministic evaluation rises (chart [`results/2026-09-28_presentation/T1_training_curves.png`](evidence/wellplate/results/2026-09-28_presentation/T1_training_curves.png)).
 Every number and gate in [R7](#r7)–[R11](#r11) is a separate deterministic evaluation over 128 episodes (one standard
 deviation ≈ 4.4 points at 50 %).
 

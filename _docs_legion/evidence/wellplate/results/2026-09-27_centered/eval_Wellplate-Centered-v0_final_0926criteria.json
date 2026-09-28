@@ -1,0 +1,18 @@
+{
+ "task": "Wellplate-Centered-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_10-59-14_centered/model_20593.pt",
+ "tag": "final_0926criteria",
+ "overrides": [
+  "env.terminations.success.params.xy_tol=0.03",
+  "env.terminations.success.params.z_tol=0.015",
+  "env.terminations.success.params.min_level=0.98",
+  "env.terminations.success.params.yaw_tol_deg=90.0"
+ ],
+ "episodes": 128,
+ "rates": {
+  "time_out": 0.0859,
+  "plate_dropped": 0.0547,
+  "arm_unstable": 0.0,
+  "success": 0.8594
+ }
+}

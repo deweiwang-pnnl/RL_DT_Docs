@@ -1,0 +1,13 @@
+{
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_02-29-31_stack/model_10790.pt",
+ "outcomes": [
+  "time_out",
+  "success",
+  "time_out",
+  "plate_dropped",
+  "success",
+  "time_out",
+  "success",
+  "success"
+ ]
+}

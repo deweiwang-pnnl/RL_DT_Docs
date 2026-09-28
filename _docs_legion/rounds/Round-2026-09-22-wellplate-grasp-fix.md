@@ -5,7 +5,7 @@ detailed report [`../reports/wellplate-round-2026-09-28.md`](../reports/wellplat
 demo guide [`../guides/SHOWING_PROGRESS.md`](../guides/SHOWING_PROGRESS.md), learning package [`../learn/`](../learn/).
 
 **Goal.** Resolve the lift blocker with Martin's robot (no built-in robot), then train the well-plate
-ladder through a 2-plate stack with videos. Plan: `RL_DT/_isaaclab_wellplate/PLAN.md` v3 (approved
+ladder through a 2-plate stack with videos. Plan: [`PLAN.md`](../evidence/wellplate/PLAN.md) v3 (approved
 2026-09-26). Continues [Round-2026-09-14](Round-2026-09-14-isaaclab-tuberacking.md).
 
 ## Log
@@ -42,7 +42,7 @@ on our own.
 
 ### 09-26 — Part A: grasp fixed and verified (gate 16/16)
 
-Evidence and chronology: `RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_fix/README.md`.
+Evidence and chronology: [`results/2026-09-26_gripper_fix/README.md`](../evidence/wellplate/results/2026-09-26_gripper_fix/README.md).
 
 - **Sweep (in the air, robot gravity off):** G0 pads tilt into a V (12° at the 85 mm contact, 24° closed); with the
   pad joint at +q the pads stay at 0.0°. Pad travel toward the table from full open to contact: 18.4 mm measured,
@@ -67,9 +67,9 @@ Evidence and chronology: `RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_f
 
 ### 09-26 afternoon/evening — ladder v3: align → lift → stack (2 plates)
 
-Chronology with every diagnosis: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-26 entries). Deterministic evaluation,
+Chronology with every diagnosis: [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md) (09-26 entries). Deterministic evaluation,
 128 episodes each: **align 82.0 %, lift 87.5 %, 2-plate stack 50.8 %** at the training tolerances; strict 0.0 / 14.8 /
-22.7 %. Evidence set for the team: `results/2026-09-26_summary/`.
+22.7 %. Evidence set for the team: [`results/2026-09-26_summary/`](../evidence/wellplate/results/2026-09-26_summary/).
 
 - Robot gravity off (Dewei; realistic arm later): arm reaches IK targets to 0.2 mm vs ~410 mm off with gravity on.
 - Ladder gate moved to the deterministic eval: with a binary gripper, exploration noise flips the grip open, so the
@@ -84,8 +84,8 @@ Chronology with every diagnosis: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-26 
 
 ### 09-26 night → 09-27 morning — PLAN v4: centred 2-plate stack (unattended, "work to the end")
 
-Chronology: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-26 night / 09-27 entries). Evidence:
-`results/2026-09-27_centered/` (README, F5, F6, V5). **Final criteria — centring ≤ 5 mm, twist ≤ 3° (long edges,
+Chronology: [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md) (09-26 night / 09-27 entries). Evidence:
+[`results/2026-09-27_centered/`](../evidence/wellplate/results/2026-09-27_centered/) (README, F5, F6, V5). **Final criteria — centring ≤ 5 mm, twist ≤ 3° (long edges,
 0°/180° equal), tilt ≤ 3°, released at rest: 90.6 % deterministic over 128 episodes** (target ≥ 40 %; the 09-26 stack
 policy 0.0 %). Successful episodes: median 2.4 mm, 0.9° twist, 0.0° tilt. Final policy
 `2026-09-27_10-59-14_centered/model_20593.pt`, task `Wellplate-Centered-v0`.
@@ -103,7 +103,7 @@ policy 0.0 %). Successful episodes: median 2.4 mm, 0.9° twist, 0.0° tilt. Fina
 
 ### 09-27 — PLAN v5: three plates, loose bottom plate, realistic arm (Dewei: "go ahead to the end of the plan")
 
-Chronology: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-27 entries); evidence `results/2026-09-27_stack3/` (README,
+Chronology: [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md) (09-27 entries); evidence [`results/2026-09-27_stack3/`](../evidence/wellplate/results/2026-09-27_stack3/) (README,
 F7, F8, V6, V7). All results deterministic, 128 episodes, each placed plate within 5 mm / 3° twist / 3° tilt of the
 one below, released, lower plate still in place (gate ≥ 40 %):
 
@@ -127,7 +127,7 @@ one below, released, lower plate still in place (gate ≥ 40 %):
 - Realistic arm: gravity-compensation torques from PhysX inverse dynamics every physics step; tracking identical to
   gravity off (434 mm off without compensation) → skills transfer unchanged.
 
-- **E5 other libraries** (`results/2026-09-27_libs/`, one seed each, from scratch, same env steps): Reach — rsl_rl,
+- **E5 other libraries** ([`results/2026-09-27_libs/`](../evidence/wellplate/results/2026-09-27_libs/), one seed each, from scratch, same env steps): Reach — rsl_rl,
   skrl, rl_games PPO 100 %, SB3 PPO 0 %, skrl SAC 0 %; Align — only skrl PPO learned it (98.4 %; rsl_rl 3.9 %, rsl_rl
   with fixed lr 0 %, rl_games / SB3 / SAC 0 %). The skrl gap is not explained (learning-rate hypothesis tested and
   rejected; value normalisation untested).
@@ -143,4 +143,4 @@ one below, released, lower plate still in place (gate ≥ 40 %):
 ## Next
 
 Dewei's review of PLAN v5 (3 plates, loose bottom plate, realistic arm done; library comparison E5 in PROGRESS.md /
-`results/2026-09-27_libs/`). Not in D4: camera-based plate detection (Alvika), a single policy for both placements.
+[`results/2026-09-27_libs/`](../evidence/wellplate/results/2026-09-27_libs/)). Not in D4: camera-based plate detection (Alvika), a single policy for both placements.

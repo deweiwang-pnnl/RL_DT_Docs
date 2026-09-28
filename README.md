@@ -1,9 +1,8 @@
 # RL_DT_docs — documentation for the RL-for-digital-twin project
 
 Notes, reports, meeting materials and learning material. **No code lives here** — the code, training results and
-all recordings are in the sibling repo `RL_DT` (PNNL GitLab). Presentation folders carry their own copies of the
-stills and presentable videos, so they work on their own. Keeping the two repos side by side is still convenient,
-because reports cite paths like `RL_DT/_isaaclab_wellplate/results/…`:
+all recordings are in the sibling repo `RL_DT` (PNNL GitLab); this repo holds **copies** of everything the documents
+cite (in `_docs_legion/evidence/` and the presentation folders), so it works on its own. Layout on the Legion laptop:
 
 ```
 RL_Twin/
@@ -44,5 +43,8 @@ other machine.
 - **Decisions** are append-only: what was chosen, why, what it rules out, and who decided.
 - Presentations are self-contained folders (`slides.html` offline, `slides.md` for Marp → PowerPoint, `assets/`,
   `videos/`).
-- Large or regenerable artefacts (checkpoints, TensorBoard logs, replay buffers) stay out of both repos; hand-carry
-  bundles go to `RL_Twin/_exports/` on the machine that made them.
+- **This repo is self-contained and fully tracked** (no `.gitignore`): every result a document cites is copied into
+  [`_docs_legion/evidence/`](_docs_legion/evidence/) — videos, charts, results READMEs, `PROGRESS.md`, a TensorBoard
+  bundle — and links point there, never into `RL_DT`. Code is referred to by name only.
+- **`RL_DT` is the detailed record:** code, every text log, TensorBoard curves, results. Only checkpoints, training-time
+  videos and Hydra `outputs/` are left out (they stay on the Legion laptop).

@@ -35,7 +35,7 @@ the code**, and **check yourself** questions (answers at the end). Slides with t
 ```
 
 The pattern that repeated all round: **a result fails → measure where it fails (per episode) → name one cause →
-change one thing → measure again.** Every step is in `RL_DT/_isaaclab_wellplate/PROGRESS.md`.
+change one thing → measure again.** Every step is in [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md).
 
 ---
 
@@ -162,8 +162,8 @@ it held, how far off) rather than averages, and test hypotheses with **A/B swaps
   write-up says so.
 
 **Where.** `scripts/rsl_rl/eval_policy.py` (`--diag_stack`, `--checkpoint2`, `--track_switch`),
-`record_labelled.py` (captioned videos), `scripts/probe_*.py`, `swap_normalizer.py`, `PROGRESS.md` (decisions with
-evidence), chart `results/2026-09-28_presentation/T1_training_curves.png`.
+`record_labelled.py` (captioned videos), `scripts/probe_*.py`, `swap_normalizer.py`, [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md) (decisions with
+evidence), chart [`results/2026-09-28_presentation/T1_training_curves.png`](../evidence/wellplate/results/2026-09-28_presentation/T1_training_curves.png).
 
 **Check yourself.**
 10. A stage's training success falls from 80 % to 30 % while its deterministic evaluation rises. Name two mechanisms.
@@ -218,7 +218,7 @@ under-powered settings, not a verdict. Single seeds; the skrl advantage is unexp
 normalisation, which skrl has and rsl_rl does not).
 
 **Where.** `agents/*_cfg.yaml`, `scripts/{skrl,rl_games,sb3}/{train,play}.py` (Isaac Lab's scripts + our task import +
-`--eval_episodes`), `scripts/eval_common.py`, `run_libs.sh`, `run_libs2.sh`, `results/2026-09-27_libs/`.
+`--eval_episodes`), `scripts/eval_common.py`, `run_libs.sh`, `run_libs2.sh`, [`results/2026-09-27_libs/`](../evidence/wellplate/results/2026-09-27_libs/).
 
 **Check yourself.**
 15. Why is "the same number of iterations" not a fair budget across libraries, and what did we use instead?

@@ -1,0 +1,13 @@
+ Learning iteration 0/300 | Mean reward: 0.02| Mean episode length: 12.90| Episode_Termination/success: 0.0000| Episode_Termination/tube_dropped: 0.0094
+ Learning iteration 25/300 | Mean reward: 0.31| Mean episode length: 297.12| Episode_Termination/success: 0.0000| Episode_Termination/tube_dropped: 0.0176
+ Learning iteration 50/300 | Mean reward: 0.33| Mean episode length: 288.57| Episode_Termination/success: 0.0000| Episode_Termination/tube_dropped: 0.0204
+ Learning iteration 75/300 | Mean reward: 0.59| Mean episode length: 297.04| Episode_Termination/success: 0.0000| Episode_Termination/tube_dropped: 0.0175
+ Learning iteration 100/300 | Mean reward: 0.77| Mean episode length: 289.28| Episode_Termination/success: 0.0000| Episode_Termination/tube_dropped: 0.0362
+ Learning iteration 125/300 | Mean reward: 0.38| Mean episode length: 143.13| Episode_Termination/success: 0.0098| Episode_Termination/tube_dropped: 0.0256
+ Learning iteration 150/300 | Mean reward: 0.52| Mean episode length: 141.28| Episode_Termination/success: 0.0670| Episode_Termination/tube_dropped: 0.0721
+ Learning iteration 175/300 | Mean reward: 0.74| Mean episode length: 125.49| Episode_Termination/success: 0.2257| Episode_Termination/tube_dropped: 0.1206
+ Learning iteration 200/300 | Mean reward: 0.74| Mean episode length: 113.35| Episode_Termination/success: 0.3756| Episode_Termination/tube_dropped: 0.0750
+ Learning iteration 225/300 | Mean reward: 0.89| Mean episode length: 115.06| Episode_Termination/success: 0.5752| Episode_Termination/tube_dropped: 0.0509
+ Learning iteration 250/300 | Mean reward: 0.87| Mean episode length: 93.52| Episode_Termination/success: 0.7071| Episode_Termination/tube_dropped: 0.0665
+ Learning iteration 275/300 | Mean reward: 1.02| Mean episode length: 86.97| Episode_Termination/success: 0.8127| Episode_Termination/tube_dropped: 0.0599
+ Learning iteration 299/300 | Mean reward: 0.98| Mean episode length: 71.70| Episode_Termination/success: 0.8587| Episode_Termination/tube_dropped: 0.0376

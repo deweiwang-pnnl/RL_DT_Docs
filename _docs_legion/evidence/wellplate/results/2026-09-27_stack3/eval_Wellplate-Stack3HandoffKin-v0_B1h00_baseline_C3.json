@@ -1,0 +1,18 @@
+{
+ "task": "Wellplate-Stack3HandoffKin-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_10-59-14_centered/model_20593.pt",
+ "checkpoint2": null,
+ "tag": "B1h00_baseline_C3",
+ "overrides": [
+  "env.events.reset_multi.params.stack_height=0.0",
+  "env.terminations.success.params.check_lower=False"
+ ],
+ "episodes": 128,
+ "rates": {
+  "time_out": 0.2422,
+  "plate_dropped": 0.1172,
+  "arm_unstable": 0.0,
+  "success": 0.6406,
+  "success_first": 0.0
+ }
+}

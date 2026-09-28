@@ -135,7 +135,7 @@ Step 2.
 - **rsl_rl PPO, 512 envs, 300 iterations (~20 min)**: success 0 → **0.86**, episode length
   289 → 72 (ends on success), `tube_dropped` ≈ 4 %. Videos at it. 0/100/200 and a
   `play.py --video` replay of `model_299.pt` (exports `policy.pt/.onnx`).
-  `results/2026-09-14_rsl_rl_300it/` — commits `22176a2`, `a384095`.
+  [`results/2026-09-14_rsl_rl_300it/`](../evidence/tuberacking/results/2026-09-14_rsl_rl_300it/) — commits `22176a2`, `a384095`.
 - Lesson: leftover `python` processes inside the container after `pkill` on the host wrapper
   starve later runs — kill with `docker exec … pkill -9 -f scripts/`.
 - Not done: camera pose for a presentable video (`env_cfg.viewer`); step 4 (other 3 libraries);
@@ -147,10 +147,10 @@ Step 2.
   cube table, three identical 96-well plates (128 × 85 × 26 mm) flat side by side, no holder, no
   physics. Decisions: T2 stacking onto Martin's second plate; his three plates with physics added
   at spawn; binary gripper; base locked; PPO/rsl_rl only tonight.
-- New folder `RL_DT/_isaaclab_wellplate/` — `PLAN.md` (v2.1), package `WellPlate_RL` with five
+- New folder `RL_DT/_isaaclab_wellplate/` — [`PLAN.md`](../evidence/wellplate/PLAN.md) (v2.1), package `WellPlate_RL` with five
   stage configs sharing one 7-D action / 205-D observation layout so checkpoints warm-start the
   next stage, `run_ladder.sh` (gates, one loosened retry, videos from views A/B, commit per stage),
-  `PROGRESS.md` (the morning read). Commit `c80cd2c`.
+  [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md) (the morning read). Commit `c80cd2c`.
 - Calibration: plate root = mesh centre, rests at z 1.013; local x = long side; stack target at
   (1.16, 1.00); gripper closes on **negative** binary action, mimic knuckle follows.
 - Smoke test (64 envs × 6 it., Hydra override, video) clean; ladder launched ~09:10 host time:
@@ -160,7 +160,7 @@ Step 2.
 
 - **Result:** reach 96.7 %, align 96 % (loosened tolerance) with the corrected TCP frame; lift 0 % after
   eight relaunches, each one fixing a real, verified defect. Everything is in `RL_DT/_isaaclab_wellplate/`
-  (`PROGRESS.md` is the chronology, `results/gripper_*.png` the evidence), commits up to `7057c75`.
+  ([`PROGRESS.md`](../evidence/wellplate/PROGRESS.md) is the chronology, [`results/gripper_*.png`](../evidence/wellplate/results/) the evidence), commits up to `7057c75`.
 - **Defects found, in order:** (1) v1 driver captured its own echo as the success number; (2) Martin's
   2F-140 USD has collision APIs on Xforms, none on the meshes → colliders added at spawn; (3) two probe
   frames I added made FrameTransformer index 0 a finger link → three stages measured the gripper housing

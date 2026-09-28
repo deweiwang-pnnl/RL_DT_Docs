@@ -195,15 +195,15 @@ The E3 policies on the realistic arm, unchanged: **54.7 %** (49.2 % with gravity
 
 ---
 
-## Where the evidence is (RL_DT/_isaaclab_wellplate/)
+## Where the evidence is (copies in this repo: `_docs_legion/evidence/`)
 
 | What | Where |
 |---|---|
-| Chronology, decisions | PROGRESS.md · PLAN.md (v3 → v5) |
-| Gripper fix | results/2026-09-26_gripper_fix/ |
-| Ladder | results/2026-09-26_summary/ |
-| Centred stacking | results/2026-09-27_centered/ |
-| Three plates, loose bottom, realistic arm | results/2026-09-27_stack3/ |
-| Libraries | results/2026-09-27_libs/ |
-| Curves / TensorBoard | results/2026-09-28_presentation/ · RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz |
-| Report · demo guide · learning package | RL_DT_docs/_docs_legion/reports/wellplate-round-2026-09-28.md · guides/SHOWING_PROGRESS.md · learn/ |
+| Chronology, decisions | [PROGRESS.md](../../evidence/wellplate/PROGRESS.md) · [PLAN.md](../../evidence/wellplate/PLAN.md) (v3 → v5) |
+| Gripper fix | [results/2026-09-26_gripper_fix/](../../evidence/wellplate/results/2026-09-26_gripper_fix/) |
+| Ladder | [results/2026-09-26_summary/](../../evidence/wellplate/results/2026-09-26_summary/) |
+| Centred stacking | [results/2026-09-27_centered/](../../evidence/wellplate/results/2026-09-27_centered/) |
+| Three plates, loose bottom, realistic arm | [results/2026-09-27_stack3/](../../evidence/wellplate/results/2026-09-27_stack3/) |
+| Libraries | [results/2026-09-27_libs/](../../evidence/wellplate/results/2026-09-27_libs/) |
+| Curves / TensorBoard | [results/2026-09-28_presentation/](../../evidence/wellplate/results/2026-09-28_presentation/) · [tensorboard/](../../evidence/wellplate/tensorboard/) |
+| Report · demo guide · learning package | [report](../../reports/wellplate-round-2026-09-28.md) · [guide](../../guides/SHOWING_PROGRESS.md) · [learn/](../../learn/) |

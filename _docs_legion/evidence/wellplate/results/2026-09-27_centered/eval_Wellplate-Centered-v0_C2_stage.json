@@ -1,0 +1,17 @@
+{
+ "task": "Wellplate-Centered-v0",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/rsl_rl/wellplate/2026-09-27_10-06-03_centered/model_19094.pt",
+ "tag": "C2_stage",
+ "overrides": [
+  "env.terminations.success.params.xy_tol=0.0100",
+  "env.terminations.success.params.yaw_tol_deg=5.0",
+  "env.terminations.success.params.min_level=0.998630"
+ ],
+ "episodes": 128,
+ "rates": {
+  "time_out": 0.0625,
+  "plate_dropped": 0.0625,
+  "arm_unstable": 0.0,
+  "success": 0.875
+ }
+}

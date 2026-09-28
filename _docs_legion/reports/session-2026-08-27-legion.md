@@ -54,7 +54,7 @@ machines where the segfault never occurs.
 **Fix:** 5 files, 191 lines. Pre-load Triton at package import, guarded so it does nothing when TF is
 already present; make the Keras agents, models and the TF-backed `Model` base class import lazily.
 Additive — the Keras agents were regression-tested and still train. Standalone patch and full
-write-up in [`../_patches/README.md`](../../../RL_DT/_patches/README.md).
+write-up in [`../_patches/README.md`](../evidence/patches/README.md).
 
 **The side effect was worth more than the fix itself.** The lazy imports mean the package now imports
 where TensorFlow is not installed at all — which is exactly the Isaac Lab container. Everything in
@@ -241,7 +241,7 @@ existing rl_games PPO baseline?* — is unanswered, and needs long runs on the I
 | Machine setup and its limits | [`environment_legion.md`](../environment_legion.md) |
 | Decisions and their reasoning | [`decisions_legion.md`](../decisions_legion.md) |
 | Items for Malachi, Martin, Alvika | [`team-discussion_legion.md`](../team-discussion_legion.md) |
-| The toolkit fix, standalone | [`../_patches/README.md`](../../../RL_DT/_patches/README.md) |
+| The toolkit fix, standalone | [`../_patches/README.md`](../evidence/patches/README.md) |
 | Isaac Lab route code | `../_toolkits/toolkit-isaaclab/isaac_integration/` |
 | Bare Isaac Sim route code | `../_toolkits/toolkit-isaacsim/` |
 

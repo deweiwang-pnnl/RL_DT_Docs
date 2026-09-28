@@ -1,0 +1,10 @@
+{
+ "task": "Wellplate-Reach-v0",
+ "library": "skrl",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/skrl/wellplate/2026-09-28_02-15-37_sac_torch/checkpoints/agent_12000.pt",
+ "tag": "Reach_skrl_sac",
+ "episodes": 128,
+ "rates": {
+  "time_out": 1.0
+ }
+}

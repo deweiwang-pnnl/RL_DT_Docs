@@ -1,0 +1,10 @@
+{
+ "task": "Wellplate-Reach-v0",
+ "library": "sb3",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/sb3/Wellplate-Reach-v0/2026-09-27_23-58-00/model.zip",
+ "tag": "Reach_sb3",
+ "episodes": 128,
+ "rates": {
+  "time_out": 1.0
+ }
+}

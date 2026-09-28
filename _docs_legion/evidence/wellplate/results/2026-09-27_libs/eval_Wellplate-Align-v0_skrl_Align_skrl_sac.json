@@ -1,0 +1,10 @@
+{
+ "task": "Wellplate-Align-v0",
+ "library": "skrl",
+ "checkpoint": "/workspace/isaaclab/dw_wellplate/WellPlate_RL/logs/skrl/wellplate/2026-09-28_00-58-39_sac_torch/checkpoints/agent_24000.pt",
+ "tag": "Align_skrl_sac",
+ "episodes": 128,
+ "rates": {
+  "time_out": 1.0
+ }
+}

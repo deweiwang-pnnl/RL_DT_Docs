@@ -26,4 +26,4 @@ rl_games, the door task) — start there if PPO or Isaac Lab are new.
 - Meeting slides: [`../presentations/2026-09-28-weekly/`](../presentations/2026-09-28-weekly/)
 - Detailed round report: [`../reports/wellplate-round-2026-09-28.md`](../reports/wellplate-round-2026-09-28.md)
 - How to show recordings and TensorBoard: [`../guides/SHOWING_PROGRESS.md`](../guides/SHOWING_PROGRESS.md)
-- Chronology: `RL_DT/_isaaclab_wellplate/PROGRESS.md`
+- Chronology: [`PROGRESS.md`](../evidence/wellplate/PROGRESS.md)
