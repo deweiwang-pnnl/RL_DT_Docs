@@ -123,6 +123,11 @@ one below, released, lower plate still in place (gate ≥ 40 %):
 - Realistic arm: gravity-compensation torques from PhysX inverse dynamics every physics step; tracking identical to
   gravity off (434 mm off without compensation) → skills transfer unchanged.
 
+- **E5 other libraries** (`results/2026-09-27_libs/`, one seed each, from scratch, same env steps): Reach — rsl_rl,
+  skrl, rl_games PPO 100 %, SB3 PPO 0 %, skrl SAC 0 %; Align — only skrl PPO learned it (98.4 %; rsl_rl 3.9 %, rsl_rl
+  with fixed lr 0 %, rl_games / SB3 / SAC 0 %). The skrl gap is not explained (learning-rate hypothesis tested and
+  rejected; value normalisation untested).
+
 ## Open
 
 - Strict precision of the 09-26 ladder (lift 10 cm: 14.8 %) — superseded for stacking by the centred policy (90.6 % at 5 mm).
