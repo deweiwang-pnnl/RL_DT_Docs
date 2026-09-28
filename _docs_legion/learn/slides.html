@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Well-plate RL — learning slides</title>
+<!--
+  Learning slides for learn/wellplate-rl-lessons.md (offline). Open in any browser.
+  Keys: → / Space / PageDown next · ← / PageUp previous · Home / End · F fullscreen · P or Ctrl+P prints one slide per page.
+  Videos play from the code repo: this file expects RL_DT_docs and RL_DT side by side in one folder
+  (…/RL_Twin/RL_DT_docs and …/RL_Twin/RL_DT). If a video does not load, open the path shown under it.
+-->
+<style>
+  :root { --ink:#141414; --ink2:#4d4c48; --muted:#8a8984; --line:#e3e2dd; --bg:#ffffff; --accent:#2a78d6; --accent2:#eb6834; --soft:#f4f3ef; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:#1b1b1b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color:var(--ink); }
+  .deck { height:calc(100% - 44px); display:flex; align-items:center; justify-content:center; }
+  section.slide { display:none; width:min(96vw, calc((100vh - 60px) * 16 / 9)); aspect-ratio:16/9; background:var(--bg); padding:3.2% 4% 3%;
+    position:relative; overflow:hidden; font-size:clamp(11px, 1.55vw, 26px); line-height:1.35; }
+  section.slide.active { display:flex; flex-direction:column; }
+  h1 { font-size:2.1em; margin:0 0 .3em; letter-spacing:-.01em; }
+  h2 { font-size:1.55em; margin:0 0 .55em; letter-spacing:-.01em; }
+  h3 { font-size:1.05em; margin:.2em 0 .3em; color:var(--ink2); }
+  p, li { margin:.25em 0; }
+  ul { margin:.2em 0 .2em 1.1em; padding:0; }
+  .kicker { color:var(--accent); font-weight:600; font-size:.8em; letter-spacing:.06em; text-transform:uppercase; margin-bottom:.4em; }
+  .row { display:flex; gap:3%; flex:1; min-height:0; }
+  .col { flex:1; min-width:0; display:flex; flex-direction:column; }
+  .col.w60 { flex:1.5; } .col.w40 { flex:1; }
+  img, video { max-width:100%; max-height:100%; object-fit:contain; display:block; border-radius:4px; }
+  .fig { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; }
+  .cap { font-size:.72em; color:var(--ink2); margin-top:.35em; }
+  .path { font-family: ui-monospace, Consolas, monospace; font-size:.62em; color:var(--muted); word-break:break-all; }
+  .big { font-size:2.6em; font-weight:700; color:var(--accent); line-height:1; }
+  .stat { background:var(--soft); border-radius:8px; padding:.6em .8em; flex:1; }
+  .stat .lbl { font-size:.75em; color:var(--ink2); margin-top:.3em; }
+  .stats { display:flex; gap:2%; margin:.4em 0 .6em; }
+  table { border-collapse:collapse; width:100%; font-size:.85em; }
+  th, td { text-align:left; padding:.32em .5em; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--ink2); font-weight:600; }
+  td.num { font-variant-numeric: tabular-nums; font-weight:600; white-space:nowrap; }
+  .note { font-size:.72em; color:var(--ink2); }
+  .foot { position:absolute; bottom:1.2%; right:2.2%; font-size:.6em; color:var(--muted); }
+  .tag { display:inline-block; background:var(--soft); border-radius:4px; padding:0 .35em; font-size:.8em; color:var(--ink2); }
+  .ok { color:#1f7a3a; font-weight:600; } .warn { color:#b35412; font-weight:600; }
+  .nav { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); color:#bbb; font-size:13px; }
+  .nav button { background:#333; color:#ddd; border:0; border-radius:4px; padding:4px 10px; margin:0 4px; cursor:pointer; }
+  @media print {
+    @page { size: 16in 9in; margin:0; }
+    html, body { background:#fff; }
+    .deck { display:block; }
+    section.slide { display:flex !important; flex-direction:column; width:16in; height:9in; aspect-ratio:auto; page-break-after:always; font-size:24px; }
+    .nav { display:none; }
+    video { display:none; }
+  }
+  .flow { display:flex; align-items:stretch; gap:.5em; flex-wrap:nowrap; margin:.6em 0; }
+  .box { border:2px solid var(--accent); border-radius:8px; padding:.45em .6em; background:#f3f7fd; font-size:.8em; flex:1; text-align:center; }
+  .box.o { border-color:var(--accent2); background:#fdf3ee; }
+  .box.g { border-color:#8a8984; background:var(--soft); }
+  .arrow { align-self:center; color:var(--muted); font-size:1.3em; }
+  .grid2 { display:grid; grid-template-columns:1fr 1fr; gap:.6em; }
+  .card { background:var(--soft); border-radius:8px; padding:.55em .75em; font-size:.85em; }
+  .card b { color:var(--accent); }
+  code { font-family: ui-monospace, Consolas, monospace; font-size:.85em; background:var(--soft); padding:0 .25em; border-radius:3px; }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<section class="slide">
+  <div class="kicker">Learning package · 2026-09-28</div>
+  <h2>Well-plate RL — what this round teaches</h2>
+  <div class="row" style="margin-top:.6em"><div class="col w60"><div class="fig"><img src="../presentations/2026-09-28-weekly/assets/10_three_plates_storyboard.png" alt="Three-plate storyboard"></div></div>
+<div class="col w40" style="justify-content:center"><p>Seven parts, same order as <code>wellplate-rl-lessons.md</code>:</p>
+<ol style="margin-left:1.1em"><li>How an Isaac Lab task is built</li><li>Robot, gripper, contacts, gravity</li><li>PPO as we actually use it</li><li>Measuring honestly</li><li>Curricula and skills</li><li>Other RL libraries</li><li>Answers and reading</li></ol>
+<p class="note">Each part: the idea · what happened here · where in the code · check yourself.</p></div></div>
+  <div class="foot">1</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 0</div>
+  <h2>The round on one page</h2>
+  <div class="flow"><div class="box o">09-21<br><b>lift 0 %</b></div><div class="arrow">→</div><div class="box">09-26 gripper fixed<br>align 82 · lift 87.5 · stack 50.8 %</div><div class="arrow">→</div><div class="box">09-27 centred stack<br><b>90.6 %</b></div><div class="arrow">→</div><div class="box">09-27 three plates<br>52 · 46 · 49 · <b>55 %</b></div><div class="arrow">→</div><div class="box g">09-28 libraries<br>comparison</div></div>
+<p style="margin-top:1em">The loop that produced every step:</p>
+<div class="flow"><div class="box g">result fails</div><div class="arrow">→</div><div class="box">measure <i>where</i> (per episode)</div><div class="arrow">→</div><div class="box">name one cause</div><div class="arrow">→</div><div class="box">change one thing</div><div class="arrow">→</div><div class="box o">measure again</div></div>
+<p class="note">Every turn of this loop is written down in <code>RL_DT/_isaaclab_wellplate/PROGRESS.md</code>.</p>
+  <div class="foot">2</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 1</div>
+  <h2>One environment step, manager by manager</h2>
+  <div class="flow"><div class="box o">policy output<br>7-D action</div><div class="arrow">→</div><div class="box"><b>Action</b> manager<br>IK → joint targets</div><div class="arrow">→</div><div class="box g">physics ×4<br>(120 Hz)</div><div class="arrow">→</div><div class="box"><b>Termination</b><br>done? success?</div><div class="arrow">→</div><div class="box"><b>Reward</b><br>Σ weight·term·dt</div><div class="arrow">→</div><div class="box"><b>Event</b><br>reset finished envs</div><div class="arrow">→</div><div class="box"><b>Observation</b><br>215 inputs</div></div>
+<div class="grid2" style="margin-top:.6em"><div class="card"><b>Terms are small functions</b><br><code>f(env, **params) → tensor(num_envs, …)</code>, listed in a config class. A new stage = a config subclass.</div>
+<div class="card"><b>Same layout ⇒ warm starts</b><br>Observation and action stayed identical across all stages; the twist term was appended <i>last</i>, so old checkpoints widen with zero weights.</div>
+<div class="card"><b>Three plates without rewriting terms</b><br>Read-only stand-ins <code>mover</code> / <code>base</code> / <code>lower</code> in the scene; every <code>"plate"</code> remapped to <code>"mover"</code>.</div>
+<div class="card"><b>Where</b><br><code>tasks/manager_based/wellplate/</code>: <code>scene.py</code>, <code>base_env_cfg.py</code>, <code>*_env_cfg.py</code>, <code>mdp/</code>, <code>agents/</code>.</div></div>
+  <div class="foot">3</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 2</div>
+  <h2>The gripper is a four-bar linkage — and the lift blocker lived there</h2>
+  <div class="row"><div class="col w40"><ul><li>One driven joint; the rest follow through <b>mimic</b> and <b>loop-closing</b> joints.</li><li>We drove a loop joint to 0 (URDF habit) → pads in a V.</li><li>Pads travel 18 mm toward the table while closing → grasp height.</li><li>Close across the 85 mm side, not 128 mm.</li><li>Contact offset / depenetration decide whether fingers sink in — Isaac Lab's 2F-140 values fixed it.</li><li class="warn">Never test a grasp by teleporting the object: it overrides the solver.</li></ul></div>
+<div class="col w60"><div class="fig"><img src="../presentations/2026-09-28-weekly/assets/02_grasp_before_vs_fixed.png" alt="Grasp before vs fixed"></div><div class="cap">Same scripted grasp: 09-20 setup (left) vs fixed (right). 16 / 16 after the fix.</div></div></div>
+  <div class="foot">4</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 2</div>
+  <h2>Gravity compensation: what a real UR controller does</h2>
+  <div class="row"><div class="col"><p>Implicit PD drives are springs toward a target. With gravity and no compensation, the spring needs an error to hold the arm up — and relative IK starts the next step from the sagged pose.</p>
+<p>Fix: every <b>physics</b> step add <code>G(q)</code> — the torques that hold the robot at configuration q — from PhysX inverse dynamics, as a feed-forward effort.</p>
+<table><tr><th>Arm</th><th>IK error after 300 steps</th></tr><tr><td>gravity off</td><td class="num">0.0 mm</td></tr><tr><td>gravity on</td><td class="num warn">434 mm</td></tr><tr><td>gravity on + G(q)</td><td class="num ok">0.0 mm</td></tr></table>
+<p class="note">Consequence: policies trained with gravity off transferred unchanged (E4 54.7 %). Code: <code>mdp/gravity_comp.py</code>.</p></div></div>
+  <div class="foot">5</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 3</div>
+  <h2>PPO — four details that decided whole stages</h2>
+  <div class="grid2"><div class="card"><b>1 · Input normaliser</b><br><code>(x − mean) / (std + 0.01)</code>. An input that never varied has std ≈ 0 → a new value is huge. A 180°-flipped plate (same plate!) became a ~100σ input. <i>Canonicalise symmetric quantities.</i></div>
+<div class="card"><b>2 · Rewards × dt</b><br>Each term is <code>weight × value × 1/30 s</code>. A bonus of weight 50 pays <b>1.7</b>.</div>
+<div class="card"><b>3 · Truncation is not termination</b><br>Success is a truncation: the future value is bootstrapped, so the bonus is the <i>only</i> gain from finishing. 1.7 &lt; critic noise ±5–7 → "placed but held". Weight 600 → 1.6 % → 67 %.</div>
+<div class="card"><b>4 · Learning-rate schedule</b><br>rsl_rl's KL-adaptive rate (÷1.5 per minibatch when KL &gt; 2× target) sat at its 1e-5 floor → fixed 1e-4. <i>But</i>: it did not explain the E5 library gap — one finding is not a rule.</div></div>
+<p class="note" style="margin-top:.5em">Also: actions are clipped to ±1, so a wide action std is "free" — it grew 1.0 → 3.7 and randomly opened the binary gripper → entropy 0.01 → 0.001.</p>
+  <div class="foot">6</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 3</div>
+  <h2>Why the policy would not let go (the arithmetic)</h2>
+  <div class="flow"><div class="box">hold one more step<br>reward r<sub>hold</sub> + γ·V(s′)</div><div class="arrow">vs</div><div class="box o">release now = success (truncation)<br>r<sub>release</sub> + <b>bonus</b> + γ·V(s)</div></div>
+<p>V(s′) ≈ V(s) and r<sub>hold</sub> ≈ r<sub>release</sub>, so the preference for releasing is <b>≈ the bonus</b>. PPO only sees it if it stands out from the advantage noise.</p>
+<table><tr><th>Bonus weight</th><th>Paid once</th><th>Critic error (value loss 25–48)</th><th>C1a deterministic</th></tr><tr><td>50</td><td class="num">1.7</td><td>± 5–7</td><td class="num warn">1.6 %</td></tr><tr><td>600</td><td class="num">20</td><td>± 5–7</td><td class="num ok">67.2 %</td></tr></table>
+  <div class="foot">7</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 4</div>
+  <h2>Measure the policy you deploy, not the training curve</h2>
+  <div class="row"><div class="col w60"><div class="fig"><img src="../presentations/2026-09-28-weekly/assets/15_training_curves.png" alt="Training curves vs deterministic evaluations"></div></div>
+<div class="col w40"><ul><li>Blue: training success <i>with noise</i> — often falls within a stage.</li><li>Orange: deterministic evaluation, 128 episodes (σ ≈ 4.4 points at 50 %) — every gate.</li><li>Look at <b>per-episode final states</b> (<code>--diag_stack</code>): "placed but held", "never picked up", "released askew".</li><li>Probe the setup <b>before</b> training (grasp gate, multi-plate checks, arm tracking).</li></ul></div></div>
+  <div class="foot">8</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 4</div>
+  <h2>The swap test — change exactly one thing</h2>
+  <p>E1 run 2 destroyed the 2-plate skill (90.6 % → 0.8 %). Weights or input normaliser?</p>
+<table style="width:70%"><tr><th></th><th>C3 normaliser</th><th>new normaliser</th></tr><tr><td><b>C3 weights</b></td><td class="num">90.6 %</td><td class="num ok">93.0 %</td></tr><tr><td><b>new weights</b></td><td class="num warn">3.9 %</td><td class="num warn">0.8 %</td></tr></table>
+<p style="margin-top:.8em">→ the <b>weights</b> were overwritten; the normaliser was innocent. Tool: <code>scripts/swap_normalizer.py</code>.</p>
+<p class="note">Same spirit: <code>--track_switch</code> showed the placed plate moving &gt; 5 mm within 0.17 s of the hand-off in 61 % of envs — one measurement that located the E1 blocker.</p>
+  <div class="foot">9</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 5</div>
+  <h2>Curricula: start where reward happens, tighten one knob</h2>
+  <div class="row"><div class="col w60"><div class="fig"><img src="../presentations/2026-09-28-weekly/assets/13_curricula.png" alt="Rising stack and mass curricula"></div></div>
+<div class="col w40"><table><tr><th>Knob</th><th>Steps</th></tr><tr><td>twist tolerance</td><td>45° → 3°</td></tr><tr><td>stack height (kinematic)</td><td>0 → 26 mm</td></tr><tr><td>bottom-plate mass</td><td>20 kg → 50 g</td></tr></table>
+<p class="note">A kinematic plate inside another is physically impossible — fine for shaping, never for the numbers that count (all gates used real dynamic plates).</p></div></div>
+  <div class="foot">10</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 5</div>
+  <h2>Skills and hand-offs</h2>
+  <div class="flow"><div class="box">Skill A (C3)<br>first placement</div><div class="arrow">→</div><div class="box o">hand-off<br>2000 recorded states</div><div class="arrow">→</div><div class="box">Skill B<br>second placement</div></div>
+<div class="grid2" style="margin-top:.6em"><div class="card"><b>Why not one policy?</b><br>Training both placements together overwrote A (swap test) and then taught "don't grasp" — every carry toward the stack crashed.</div>
+<div class="card"><b>Why start states?</b><br>B trained from the home pose; at the real hand-off its first move dragged the plate A had just placed.</div>
+<div class="card"><b>Dense damage penalties</b><br>Success already requires "lower plate in place", but only at the end — a displacement penalty says so at once.</div>
+<div class="card"><b>Open</b><br>One policy that chains both placements itself — the natural next research step.</div></div>
+  <div class="foot">11</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 6</div>
+  <h2>Libraries: same task, same env steps, one evaluation</h2>
+  <div class="row"><div class="col w60"><div class="fig"><img src="../presentations/2026-09-28-weekly/assets/14_libraries.png" alt="Library comparison"></div></div>
+<div class="col w40"><ul><li>Budget in <b>env steps</b>, not iterations (an iteration means different data per library).</li><li>One shared deterministic evaluation (<code>eval_common.py</code>).</li><li>Only skrl PPO learned Align from scratch — reason open; next test: value-target normalisation.</li><li>SB3 / SAC settings were under-powered; not a verdict.</li><li>One seed each: a direction, not a variance.</li></ul></div></div>
+  <div class="foot">12</div>
+</section>
+
+<section class="slide">
+  <div class="kicker">Part 7</div>
+  <h2>What to learn next</h2>
+  <div class="grid2"><div class="card"><b>Read</b><br>PPO (arXiv:1707.06347) · GAE (1506.02438) · <i>What Matters in On-Policy RL</i> (2006.05990) · <i>Time Limits in RL</i> (1712.00378) · Curriculum Learning (Bengio 2009) · Skill Chaining (Konidaris &amp; Barto 2009) · Catastrophic forgetting (1612.00796) · SAC (1801.01290)</div>
+<div class="card"><b>Do</b><br>1 · Run <code>eval_policy.py --diag_stack</code> on a checkpoint and read the per-episode table.<br>2 · Open TensorBoard on the bundle; find where training success falls while the evaluation rises.<br>3 · Change one reward weight in <code>centered_env_cfg.py</code> and predict the effect before running.</div>
+<div class="card"><b>Answer</b><br>The 16 "check yourself" questions in <code>wellplate-rl-lessons.md</code> (answers at the end).</div>
+<div class="card"><b>Reference</b><br>Isaac Lab docs: isaac-sim.github.io/IsaacLab · round report: <code>reports/wellplate-round-2026-09-28.md</code></div></div>
+  <div class="foot">13</div>
+</section>
+</div>
+<div class="nav"><button onclick="go(-1)">‹</button><span id="count"></span><button onclick="go(1)">›</button></div>
+<script>
+  const slides = [...document.querySelectorAll('section.slide')];
+  let i = 0;
+  try { const h = parseInt(location.hash.slice(1)); if (h >= 1 && h <= slides.length) i = h - 1; } catch (e) {}
+  function show(n) {
+    slides.forEach(s => s.querySelectorAll('video').forEach(v => v.pause()));
+    slides[i].classList.remove('active'); i = Math.max(0, Math.min(slides.length - 1, n)); slides[i].classList.add('active');
+    document.getElementById('count').textContent = (i + 1) + ' / ' + slides.length; history.replaceState(null, '', '#' + (i + 1));
+  }
+  function go(d) { show(i + d); }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') show(0); else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key === 'p' || e.key === 'P') window.print();
+  });
+  show(i);
+</script>
+</body>
+</html>

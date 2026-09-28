@@ -1,8 +1,8 @@
 # GPU re-test of the previously validated environments — 2026-08-29
 
 Re-ran `TorchTD3-v0` on the environments recorded in
-[`PUBLICATION_MATERIALS.md`](../_docs/PUBLICATION_MATERIALS.md), on the `trossen-ai` RTX 5090, after the
-TF/triton fix ([`../_patches/README.md`](../_patches/README.md)) made the GPU actually usable.
+[`PUBLICATION_MATERIALS.md`](../../_docs/PUBLICATION_MATERIALS.md), on the `trossen-ai` RTX 5090, after the
+TF/triton fix ([`../_patches/README.md`](../../../RL_DT/_patches/README.md)) made the GPU actually usable.
 
 ## Why the old and new numbers are not directly comparable
 
@@ -69,7 +69,7 @@ published AdroitHandDoor figure without first pinning the same library version.
 
 `gymnasium-robotics` is in neither `requirements.txt` nor `env.yaml`, yet `envs/robotics_flat.py`
 depends on it and `utests/test_registry.py::test_env` fails without it. Same category as the
-`pysindy` / `scikit-learn` gap already noted in [`environment.md`](../_docs/environment.md). Installed here
+`pysindy` / `scikit-learn` gap already noted in [`environment.md`](../../_docs/environment.md). Installed here
 as `gymnasium-robotics==1.4.2`; adding it (pinned) to `requirements.txt` would be a small, useful
 upstream contribution.
 

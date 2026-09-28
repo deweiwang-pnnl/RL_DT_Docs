@@ -6,6 +6,45 @@ can act on each item. Every number cited lives in
 
 ---
 
+## Well-plate round (2026-09-22 → 09-28) — items for the weekly meeting
+
+Results and evidence: [`reports/wellplate-round-2026-09-28.md`](reports/wellplate-round-2026-09-28.md); slides:
+[`presentations/2026-09-28-weekly/`](presentations/2026-09-28-weekly/).
+
+### For Martin
+
+1. **The bottom plate renders black in our container.** It uses the same mesh (`WellPlateSimple`) as the other two,
+   which render normally; the scene's `96WellPlate_thin.fbx` payloads also fail to load, but they are separate decor
+   prims. Cause not checked — is this known on your side?
+2. **GRIPPERFIX does not compose with our robot file** — the gripper lands 0.86 m from the wrist
+   ([D16](PUBLICATION_MATERIALS_legion.md#d16)). The lift problem turned out to be our own setup
+   ([D12](PUBLICATION_MATERIALS_legion.md#d12)), so nothing is blocked, but one self-contained robot USD with the
+   working gripper would keep our two copies from drifting.
+3. **For anyone measuring plate alignment in `WellPlates.usd`:** the bottom plate's mesh is rotated 48.97° inside its
+   prim ([D17](PUBLICATION_MATERIALS_legion.md#d17)).
+
+### For Alvika
+
+1. **Camera-based plate detection** — can the TubeRacking perception be reused? The well-plate policies still observe
+   exact simulator poses.
+2. **A trap worth knowing in Isaac Lab:** `is_terminated_term` ignores time-out terms, so a success bonus on a
+   success-as-truncation term pays 0 ([D14](PUBLICATION_MATERIALS_legion.md#d14)).
+
+### For Malachi
+
+1. **Library choice:** on the same task, only skrl PPO learned the harder stage from scratch (98.4 % vs rsl_rl 3.9 %),
+   one seed each, cause open ([R11](PUBLICATION_MATERIALS_legion.md#r11)). Relevant if the toolkit is to wrap one of
+   these libraries — worth a controlled comparison before choosing.
+
+### Team-wide
+
+1. **Are 5 mm / 3° twist / 3° tilt the right stacking tolerances** for the real task?
+2. **What comes after stacking** — plates into a rack, a moving base, the real robot?
+3. **What the numbers do not show yet:** single seeds; 45 % failures in the final three-plate setting; two policies
+   switched by the environment; privileged state, locked base, no randomisation.
+
+---
+
 ## For Malachi — three toolkit bugs and one proposal
 
 ### 1. TensorFlow and Triton conflict, and it segfaults the torch agents

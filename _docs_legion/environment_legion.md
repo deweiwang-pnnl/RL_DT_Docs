@@ -66,24 +66,43 @@ PNNL machines goes through a personal GitHub repo instead (see `WORKLOG_legion.m
 
 ## Disk layout
 
+*Updated 2026-09-28.*
+
 ```
 /home/aidev/RL_Twin/
-├── RL_DT/                        the git repo (github.com/Dewei-Wang-xx/RL4DT-Toolkit)
-│   ├── _docs/                    documentation, including these _legion files
+├── RL_DT/                        code repo (origin: gitlab-data.pnnl.gov … rl4dt_toolkit, SSH)
+│   ├── _isaaclab_wellplate/      the well-plate task: WellPlate_RL/ package, drivers run_*.sh, PLAN.md,
+│   │                             PROGRESS.md, results/ (videos, charts, evaluations — tracked)
+│   ├── _isaaclab_tuberacking/    working copy of Alvika's tube task + container compose override
 │   ├── _patches/                 the TF/triton fix, standalone
-│   └── _toolkits/
-│       ├── toolkit-isaaclab/     copy for the Isaac Lab + Docker route
-│       └── toolkit-isaacsim/     copy for the bare Isaac Sim route
-├── SciOptControlToolkit/         the working toolkit clone (branch develop-dw)
-├── digital_twin_models-DT_reorg/ Martin's USD assets (extracted, not a clone)
-├── isaaclab_dt-main/             Alvika's Isaac Lab fork (extracted, not a clone)
-└── _reference/                   papers, older copies (~4 GB)
+│   └── _toolkits/                toolkit copies for the two integration routes
+├── RL_DT_docs/                   docs repo (origin: github.com/deweiwang-pnnl/RL_DT_Docs) — this folder
+├── SciOptControlToolkit/         the working toolkit clone (branch develop-dw); its .venv has tensorboard
+├── digital_twin_models-DT_reorg/ Martin's USD assets (mounted in the container as envs_external)
+├── isaaclab_dt-main/             Alvika's Isaac Lab fork + Docker recipe
+├── digitaltwin_rl-master/        Alvika's TubeRacking_RL, pristine
+├── _exports/                     hand-carry bundles, not in git (e.g. tensorboard_wellplate_2026-09-28.tar.gz)
+└── _reference/                   papers, older copies, Martin's 09-22 update (~4 GB)
 
 /home/aidev/isaacsim/             Isaac Sim 5.1.0 workstation install (17 GB)
 ```
 
-Disk: 1.9 TB total, ~1.3 TB free. Docker holds ~143 GB (of which ~62 GB is reclaimable build cache
-via `docker builder prune`).
+Disk: 1.9 TB total, ~1.3 TB free (2026-09-28).
+
+## Well-plate training on this machine
+
+- **Container:** `isaac-lab-tuberacking` (image `isaac-lab-base`, host networking). The task package is mounted at
+  `/workspace/isaaclab/dw_wellplate` (= `RL_DT/_isaaclab_wellplate`), Martin's assets at
+  `/workspace/isaaclab/envs_external`. Commands run as
+  `docker exec -e DISPLAY= isaac-lab-tuberacking bash -c "cd /workspace/isaaclab/dw_wellplate/WellPlate_RL && /workspace/isaaclab/isaaclab.sh -p scripts/…"`.
+- **RL libraries in the container:** rsl_rl 5.0.1, skrl 2.1.0, rl_games 1.6.1, Stable-Baselines3 2.9.0 (no installs
+  were needed).
+- **Logs and checkpoints:** `RL_DT/_isaaclab_wellplate/WellPlate_RL/logs/` (4.6 GB on 09-28), git-ignored. Files
+  written by the container are owned by root; `docker exec … chown` before editing them from the host.
+- **TensorBoard:** `~/RL_Twin/SciOptControlToolkit/.venv/bin/tensorboard --logdir <logs> --port 6006`; from
+  elsewhere `ssh -L 6006:localhost:6006 aidev@trossen-ai`. A curated 40-run bundle for other machines:
+  `_exports/tensorboard_wellplate_2026-09-28.tar.gz`. How to present: [`guides/SHOWING_PROGRESS.md`](guides/SHOWING_PROGRESS.md).
+- **Headless screenshots of HTML slides:** `google-chrome --headless=new --screenshot=… file://…/slides.html#N`.
 
 ## Python and the toolkit
 

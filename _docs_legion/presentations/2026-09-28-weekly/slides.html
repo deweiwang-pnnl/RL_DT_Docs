@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Well-plate stacking — weekly 2026-09-28</title>
+<!--
+  Offline slide deck (no internet needed). Open in any browser.
+  Keys: → / Space / PageDown next · ← / PageUp previous · Home / End · F fullscreen · P or Ctrl+P prints one slide per page.
+  Videos play from the code repo: this file expects RL_DT_docs and RL_DT side by side in one folder
+  (…/RL_Twin/RL_DT_docs and …/RL_Twin/RL_DT). If a video does not load, open the path shown under it.
+-->
+<style>
+  :root { --ink:#141414; --ink2:#4d4c48; --muted:#8a8984; --line:#e3e2dd; --bg:#ffffff; --accent:#2a78d6; --accent2:#eb6834; --soft:#f4f3ef; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; height:100%; background:#1b1b1b; font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color:var(--ink); }
+  .deck { height:calc(100% - 44px); display:flex; align-items:center; justify-content:center; }
+  section.slide { display:none; width:min(96vw, calc((100vh - 60px) * 16 / 9)); aspect-ratio:16/9; background:var(--bg); padding:3.2% 4% 3%;
+    position:relative; overflow:hidden; font-size:clamp(11px, 1.55vw, 26px); line-height:1.35; }
+  section.slide.active { display:flex; flex-direction:column; }
+  h1 { font-size:2.1em; margin:0 0 .3em; letter-spacing:-.01em; }
+  h2 { font-size:1.55em; margin:0 0 .55em; letter-spacing:-.01em; }
+  h3 { font-size:1.05em; margin:.2em 0 .3em; color:var(--ink2); }
+  p, li { margin:.25em 0; }
+  ul { margin:.2em 0 .2em 1.1em; padding:0; }
+  .kicker { color:var(--accent); font-weight:600; font-size:.8em; letter-spacing:.06em; text-transform:uppercase; margin-bottom:.4em; }
+  .row { display:flex; gap:3%; flex:1; min-height:0; }
+  .col { flex:1; min-width:0; display:flex; flex-direction:column; }
+  .col.w60 { flex:1.5; } .col.w40 { flex:1; }
+  img, video { max-width:100%; max-height:100%; object-fit:contain; display:block; border-radius:4px; }
+  .fig { flex:1; min-height:0; display:flex; align-items:center; justify-content:center; }
+  .cap { font-size:.72em; color:var(--ink2); margin-top:.35em; }
+  .path { font-family: ui-monospace, Consolas, monospace; font-size:.62em; color:var(--muted); word-break:break-all; }
+  .big { font-size:2.6em; font-weight:700; color:var(--accent); line-height:1; }
+  .stat { background:var(--soft); border-radius:8px; padding:.6em .8em; flex:1; }
+  .stat .lbl { font-size:.75em; color:var(--ink2); margin-top:.3em; }
+  .stats { display:flex; gap:2%; margin:.4em 0 .6em; }
+  table { border-collapse:collapse; width:100%; font-size:.85em; }
+  th, td { text-align:left; padding:.32em .5em; border-bottom:1px solid var(--line); vertical-align:top; }
+  th { color:var(--ink2); font-weight:600; }
+  td.num { font-variant-numeric: tabular-nums; font-weight:600; white-space:nowrap; }
+  .note { font-size:.72em; color:var(--ink2); }
+  .foot { position:absolute; bottom:1.2%; right:2.2%; font-size:.6em; color:var(--muted); }
+  .tag { display:inline-block; background:var(--soft); border-radius:4px; padding:0 .35em; font-size:.8em; color:var(--ink2); }
+  .ok { color:#1f7a3a; font-weight:600; } .warn { color:#b35412; font-weight:600; }
+  .nav { position:fixed; bottom:8px; left:50%; transform:translateX(-50%); color:#bbb; font-size:13px; }
+  .nav button { background:#333; color:#ddd; border:0; border-radius:4px; padding:4px 10px; margin:0 4px; cursor:pointer; }
+  @media print {
+    @page { size: 16in 9in; margin:0; }
+    html, body { background:#fff; }
+    .deck { display:block; }
+    section.slide { display:flex !important; flex-direction:column; width:16in; height:9in; aspect-ratio:auto; page-break-after:always; font-size:24px; }
+    .nav { display:none; }
+    video { display:none; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+<!-- 1 -->
+<section class="slide">
+  <div class="kicker">Weekly meeting · 2026-09-28</div>
+  <h1>Well-plate stacking in Isaac Lab</h1>
+  <h3>From “the robot cannot lift a plate” to three plates stacked, centred, all loose</h3>
+  <div class="row" style="margin-top:1em">
+    <div class="col w60"><div class="fig"><img src="assets/10_three_plates_storyboard.png" alt="Six stills of one episode stacking three plates"></div>
+      <div class="cap">One deterministic episode of the final policy: pick, place on the bottom plate, pick the third, place on top.</div></div>
+    <div class="col w40" style="justify-content:center">
+      <p>Dewei Wang · Legion laptop (RTX 5090)</p>
+      <p class="note">Robot: Martin's Ridgeback + UR7e + Robotiq 2F-140 · Scene: Martin's <span class="tag">WellPlates.usd</span> · PPO (rsl_rl), 512 parallel envs</p>
+      <p class="note">Code and evidence: <span class="tag">RL_DT/_isaaclab_wellplate/</span> · Docs: <span class="tag">RL_DT_docs/_docs_legion/</span></p>
+    </div>
+  </div>
+  <div class="foot">1</div>
+</section>
+
+<!-- 2 -->
+<section class="slide">
+  <div class="kicker">Headline</div>
+  <h2>Three results, each measured on 128 deterministic episodes</h2>
+  <div class="stats">
+    <div class="stat"><div class="big">87.5 %</div><div class="lbl"><b>Lift</b> — was 0 % on 09-21. The blocker was our gripper setup, not Martin's asset.</div></div>
+    <div class="stat"><div class="big">90.6 %</div><div class="lbl"><b>Centred 2-plate stack</b> — ≤ 5 mm centring, ≤ 3° twist, ≤ 3° tilt, released.</div></div>
+    <div class="stat"><div class="big">54.7 %</div><div class="lbl"><b>Three plates</b> — all loose, bottom plate loose too, realistic arm (gravity + compensation).</div></div>
+  </div>
+  <table>
+    <tr><th>Also done</th><th>Result</th></tr>
+    <tr><td>2-plate stack (loose tolerance, 3 cm)</td><td class="num">50.8 %</td></tr>
+    <tr><td>Other RL libraries, same task from scratch (skrl, rl_games, Stable-Baselines3; PPO and SAC)</td><td>on Reach all GPU PPOs 100 %; on Align only skrl PPO learned it (98.4 %)</td></tr>
+  </table>
+  <p class="note" style="margin-top:.8em">“Deterministic” = the policy's mean action, no exploration noise. Training-log success is noisier and lower — see slide 14.</p>
+  <div class="foot">2</div>
+</section>
+
+<!-- 3 -->
+<section class="slide">
+  <div class="kicker">Since the last meeting</div>
+  <h2>What happened this round</h2>
+  <table>
+    <tr><th style="width:14%">Date</th><th>Step</th><th style="width:22%">Outcome</th></tr>
+    <tr><td>09-21</td><td>Status meeting: reach 97 %, align 96 %, <b>lift 0 %</b> — “no plate was ever lifted”</td><td class="warn">blocked</td></tr>
+    <tr><td>09-22 – 25</td><td>Martin's GRIPPERFIX checked (does not compose with our robot file); message to Martin</td><td>no reply; went on alone</td></tr>
+    <tr><td>09-26</td><td>Found and fixed four defects in <i>our</i> gripper setup; grasp gate 16/16; ladder align → lift → stack</td><td class="ok">lift 87.5 %, stack 50.8 %</td></tr>
+    <tr><td>09-26/27</td><td>Centred stacking (plan v4): twist observation, tolerance curriculum, release incentive</td><td class="ok">90.6 %</td></tr>
+    <tr><td>09-27</td><td>Plan v5: three plates (hand-off, all loose), loose bottom plate, realistic arm</td><td class="ok">52 / 46 / 49 / 55 %</td></tr>
+    <tr><td>09-27/28</td><td>Plan v5 E5: skrl, rl_games, Stable-Baselines3 on the same tasks</td><td>comparison</td></tr>
+  </table>
+  <p class="note" style="margin-top:.8em">Unattended runs, driven by scripts that gate each stage on a deterministic evaluation, retry once, and stop for diagnosis. Every decision is logged in <span class="tag">PROGRESS.md</span>.</p>
+  <div class="foot">3</div>
+</section>
+
+<!-- 4 -->
+<section class="slide">
+  <div class="kicker">The lift blocker</div>
+  <h2>It was our gripper setup — four defects, each measured</h2>
+  <div class="row">
+    <div class="col w40">
+      <ul>
+        <li><b>Pad joint driven to 0</b> — copied from the URDF; in the USD it closes the four-bar loop and must follow +q. Pads bent into a V (12° at contact).</li>
+        <li><b>Grasp height</b> — pads travel 18 mm toward the table while closing; they hit the table.</li>
+        <li><b>Closing axis</b> — fingers closed across the 128 mm side, not the 85 mm side.</li>
+        <li><b>Contact physics</b> — pads sank through the plate under a two-sided squeeze; Isaac Lab's own 2F-140 settings fixed it.</li>
+      </ul>
+      <p class="note">Also: robot gravity off for now (the arm stalled 0.3–0.4 m short without compensation) — the realistic arm came later (slide 12).</p>
+    </div>
+    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/02_grasp_before_vs_fixed.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4"></video></div>
+      <div class="cap">Left: 09-20 setup, the plate stays on the table. Right: fixed, lifted 10 cm.</div>
+      <div class="path">RL_DT/_isaaclab_wellplate/results/2026-09-26_gripper_fix/V2_grasp_G0_vs_fixed.mp4</div></div>
+  </div>
+  <div class="foot">4</div>
+</section>
+
+<!-- 5 -->
+<section class="slide">
+  <div class="kicker">The lift blocker</div>
+  <h2>Grasp verified: 16 of 16 plates held, lifted 10 cm, 0.6° tilt</h2>
+  <div class="row">
+    <div class="col w60"><div class="fig"><img src="assets/01_grasp_sequence_fixed.png" alt="Four stills: pre-grasp, closing, closed, lifted"></div></div>
+    <div class="col w40">
+      <p>Scripted controller, 16 parallel envs, before any training — a gate for the ladder.</p>
+      <div class="fig"><img src="assets/03_pad_height.png" alt="Pad height during closing"></div>
+      <div class="cap">Pad height while closing: measured 18.4 mm travel vs 18.3 mm predicted from the USD.</div>
+    </div>
+  </div>
+  <div class="foot">5</div>
+</section>
+
+<!-- 6 -->
+<section class="slide">
+  <div class="kicker">The ladder</div>
+  <h2>Align → lift → stack works once the grasp works</h2>
+  <div class="row">
+    <div class="col w60"><div class="fig"><img src="assets/04_ladder_success.png" alt="Bar chart: align 82, lift 87.5, stack 50.8 percent"></div></div>
+    <div class="col w40">
+      <div class="fig"><video controls preload="none" poster="assets/05_lift_before_after.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-26_summary/V3_lift_before_after_viewA.mp4"></video></div>
+      <div class="cap">Lift, before (09-20) vs after.</div>
+      <div class="path">results/2026-09-26_summary/V3_lift_before_after_viewA.mp4 · V4_stack_8_episodes_labelled.mp4</div>
+      <p class="note">What it took: gate on deterministic eval (noise flips a binary gripper); entropy 0.01 → 0.001; stack rewards that no longer switch off at the goal; exploration on the gripper so it learns to let go.</p>
+    </div>
+  </div>
+  <div class="foot">6</div>
+</section>
+
+<!-- 7 -->
+<section class="slide">
+  <div class="kicker">Centred stacking</div>
+  <h2>Centred, aligned, level: 90.6 % (the 09-26 policy: 0 %)</h2>
+  <div class="row">
+    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/07_centred_before_after.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-27_centered/V5_centred_before_vs_after.mp4"></video></div>
+      <div class="cap">Before: 09-26 stack policy (twist ~73°, mostly still holding the plate). After: centred policy — captions give each episode's errors.</div>
+      <div class="path">results/2026-09-27_centered/V5_centred_before_vs_after.mp4</div></div>
+    <div class="col w40">
+      <table>
+        <tr><th>Criterion</th><th>Target</th><th>Median achieved</th></tr>
+        <tr><td>Centring</td><td>≤ 5 mm</td><td class="num">2.4 mm</td></tr>
+        <tr><td>Twist (long edges)</td><td>≤ 3°</td><td class="num">0.9°</td></tr>
+        <tr><td>Tilt</td><td>≤ 3°</td><td class="num">0.0°</td></tr>
+        <tr><td>Released, at rest</td><td>required</td><td class="num">yes</td></tr>
+      </table>
+      <div class="fig" style="margin-top:.5em"><img src="assets/08_centred_stages.png" alt="Curriculum stages C1a to C3"></div>
+    </div>
+  </div>
+  <div class="foot">7</div>
+</section>
+
+<!-- 8 -->
+<section class="slide">
+  <div class="kicker">Centred stacking</div>
+  <h2>Three findings that made centring learnable</h2>
+  <div class="row">
+    <div class="col">
+      <h3>1 · Tell the policy which way to turn</h3>
+      <p>Twist between the plates as an observation (sin 2Δ, cos 2Δ — either end is fine). Before, it had to decode it from two quaternions and the bottom plate's 49° mesh offset.</p>
+      <h3>2 · Raise the bar in steps</h3>
+      <p>Twist tolerance 45° → 30° → 20° → 10° → 5° → 3°, centring 15 → 10 → 5 mm. At 10° straight away nothing was ever rewarded.</p>
+    </div>
+    <div class="col">
+      <h3>3 · Make letting go worth it</h3>
+      <p>Success ends the episode but the value is bootstrapped, so the one-off success bonus is the only gain from releasing. Rewards are scaled by the 1/30 s step: a bonus of 50 paid 1.7 — below the critic's noise. 600 → C1a 1.6 % → 67 %.</p>
+      <div class="fig"><img src="assets/09_centred_errors.png" alt="Per-episode centring and twist errors before and after"></div>
+    </div>
+  </div>
+  <div class="foot">8</div>
+</section>
+
+<!-- 9 -->
+<section class="slide">
+  <div class="kicker">Three plates</div>
+  <h2>All three of Martin's plates, stacked</h2>
+  <div class="row">
+    <div class="col w60"><div class="fig"><video controls preload="none" poster="assets/10_three_plates_storyboard.png" src="../../../../RL_DT/_isaaclab_wellplate/results/2026-09-27_stack3/V6_three_plates_E4_viewT.mp4"></video></div>
+      <div class="cap">Final setting (all loose, loose bottom plate, realistic arm): 6 consecutive episodes, 4 successes; captions give each plate's error.</div>
+      <div class="path">results/2026-09-27_stack3/V6_three_plates_E4_viewT.mp4 (overview) · V7_three_plates_E4_viewS.mp4 (close-up)</div></div>
+    <div class="col w40">
+      <div class="fig"><img src="assets/11_three_plates_closeup.png" alt="Close-up: white on black, yellow on white"></div>
+      <p class="note">The bottom plate renders black in our container although it uses the same mesh as the other two — cause not checked yet (a question for Martin).</p>
+    </div>
+  </div>
+  <div class="foot">9</div>
+</section>
+
+<!-- 10 -->
+<section class="slide">
+  <div class="kicker">Three plates</div>
+  <h2>Every step passed its 40 % gate</h2>
+  <div class="row">
+    <div class="col w60"><div class="fig"><img src="assets/12_three_plates_results.png" alt="Bar chart of E1 to E4"></div></div>
+    <div class="col w40">
+      <table>
+        <tr><th>Step</th><th>Setting</th><th>Result</th></tr>
+        <tr><td>E1</td><td>next plate handed off into the pick area</td><td class="num">52.3 %</td></tr>
+        <tr><td>E2</td><td>all plates start loose</td><td class="num">46.1 %</td></tr>
+        <tr><td>E3</td><td>+ loose bottom plate (moves ≤ 1 cm)</td><td class="num">49.2 %</td></tr>
+        <tr><td>E4</td><td>+ realistic arm</td><td class="num">54.7 %</td></tr>
+      </table>
+      <p class="note">Each placed plate within 5 mm / 3° / 3° of the one below, both released, the lower one still in place.</p>
+    </div>
+  </div>
+  <div class="foot">10</div>
+</section>
+
+<!-- 11 -->
+<section class="slide">
+  <div class="kicker">Three plates — how</div>
+  <h2>One policy failed; two skills and two curricula worked</h2>
+  <div class="row">
+    <div class="col w40">
+      <ul>
+        <li><b>One policy for both placements</b> forgot the first placement (the weights were overwritten — swap test) and finally learned not to grasp at all.</li>
+        <li><b>Two skills</b>: C3 places the first plate; a second policy, trained from it, places the third.</li>
+        <li><b>Rising stack</b>: trained at full height directly, the second skill got 0.8 %. A kinematic middle plate rising 0 → 26 mm: 70–92 % at each step, 91 % at full height.</li>
+        <li><b>Hand-off start states</b>: its first move used to drag the plate just placed (> 5 mm in 61 % of cases within 0.17 s). Training from 2000 recorded hand-offs fixed it.</li>
+        <li><b>Loose bottom plate</b>: mass curriculum 20 kg → 50 g, plus a penalty for pushing it.</li>
+      </ul>
+    </div>
+    <div class="col w60"><div class="fig"><img src="assets/13_curricula.png" alt="Rising-stack and mass curricula"></div></div>
+  </div>
+  <div class="foot">11</div>
+</section>
+
+<!-- 12 -->
+<section class="slide">
+  <div class="kicker">Realistic arm</div>
+  <h2>Gravity on, compensated like a real UR controller — no retraining needed</h2>
+  <div class="row">
+    <div class="col">
+      <p>A real UR arm cancels gravity in its joint controller. Our simulated joints are PD springs (400 / 80), so we add the compensation torque G(q) from PhysX's inverse dynamics every physics step.</p>
+      <table>
+        <tr><th>Arm model</th><th>IK tracking error after 300 steps (16 envs)</th></tr>
+        <tr><td>Gravity off (used for training)</td><td class="num">0.0 mm</td></tr>
+        <tr><td>Gravity on, no compensation</td><td class="num warn">434 mm</td></tr>
+        <tr><td>Gravity on + compensation</td><td class="num ok">0.0 mm</td></tr>
+      </table>
+      <p style="margin-top:.8em">The E3 policies on the realistic arm, unchanged: <b>54.7 %</b> (49.2 % with gravity off — within sampling noise).</p>
+    </div>
+  </div>
+  <div class="foot">12</div>
+</section>
+
+<!-- 13 -->
+<section class="slide">
+  <div class="kicker">Other libraries</div>
+  <h2>Same task, from scratch, same budget — one seed each</h2>
+  <div class="row">
+    <div class="col w60"><div class="fig"><img src="assets/14_libraries.png" alt="Library comparison chart"></div></div>
+    <div class="col w40">
+      <ul>
+        <li>Reach: rsl_rl, skrl, rl_games PPO all 100 % in 11–14 min.</li>
+        <li>Align from scratch: <b>only skrl PPO</b> (98.4 %).</li>
+        <li>Why skrl beats rsl_rl here is <b>open</b>: a learning-rate explanation was tested and rejected. Next test: value normalisation.</li>
+        <li>SB3 PPO and skrl SAC learned neither — their settings (fixed LR + KL early stop; one SAC update per 512 env steps) look under-powered, not a fair verdict.</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">13</div>
+</section>
+
+<!-- 14 -->
+<section class="slide">
+  <div class="kicker">Reading the numbers</div>
+  <h2>Why we report deterministic evaluation, not the training curve</h2>
+  <div class="row">
+    <div class="col w60"><div class="fig"><img src="assets/15_training_curves.png" alt="Training success curves with deterministic evaluation dots"></div></div>
+    <div class="col w40">
+      <p>The blue line is what TensorBoard shows: success <i>with exploration noise</i>. With a binary gripper, noise opens the grip at random, so it often falls within a stage while the real (deterministic) success — orange dots — rises.</p>
+      <p>Every gate and every number in this deck is the deterministic one, 128 episodes, from a separate evaluation script.</p>
+    </div>
+  </div>
+  <div class="foot">14</div>
+</section>
+
+<!-- 15 -->
+<section class="slide">
+  <div class="kicker">Limits</div>
+  <h2>What these numbers do not show yet</h2>
+  <ul>
+    <li><b>One seed per training run.</b> No variance yet — the largest gap in the evidence.</li>
+    <li><b>Final setting fails 45 % of the time</b>: 36 % time-outs (second placement unfinished or middle plate pushed out of tolerance), 9 % drops.</li>
+    <li><b>Two policies</b>, switched by the environment's phase — not one policy that decides when the first plate is done.</li>
+    <li><b>Privileged state</b>: the policy sees exact plate poses from the simulator; no camera yet.</li>
+    <li><b>Robot base locked</b>; plates start in fixed pick areas; plate mass / friction not randomised.</li>
+    <li>Realistic arm = gravity + compensation only; no joint friction, latency or torque limits beyond the sim's.</li>
+  </ul>
+  <div class="foot">15</div>
+</section>
+
+<!-- 16 -->
+<section class="slide">
+  <div class="kicker">Next</div>
+  <h2>What can be done next — and what we need from the team</h2>
+  <div class="row">
+    <div class="col">
+      <h3>Could do next</h3>
+      <ul>
+        <li>3 seeds per result; report variance.</li>
+        <li>Cut the 36 % time-outs (second-placement retries, longer training).</li>
+        <li>One policy that chains both placements itself.</li>
+        <li>Domain randomisation: plate mass, friction, pick poses, base pose.</li>
+        <li>skrl PPO vs rsl_rl: value normalisation, 3 seeds, along the ladder.</li>
+        <li>Camera-based plate detection instead of privileged poses.</li>
+      </ul>
+    </div>
+    <div class="col">
+      <h3>Questions for the team</h3>
+      <ul>
+        <li><b>Martin</b> — the bottom plate renders black in our container (same mesh as the others; the scene also has <span class="tag">96WellPlate_thin.fbx</span> payloads that do not load) — known? One self-contained robot USD with the working gripper?</li>
+        <li><b>Alvika</b> — camera-based plate detection: reuse from TubeRacking?</li>
+        <li><b>All</b> — are 5 mm / 3° / 3° the right stacking tolerances for the real task? What is the next task after stacking?</li>
+      </ul>
+    </div>
+  </div>
+  <div class="foot">16</div>
+</section>
+
+<!-- 17 -->
+<section class="slide">
+  <div class="kicker">Backup</div>
+  <h2>Where the evidence is</h2>
+  <table>
+    <tr><th>What</th><th>Where (all under RL_DT/_isaaclab_wellplate/)</th></tr>
+    <tr><td>Chronology, every decision with evidence</td><td class="path">PROGRESS.md · PLAN.md (v3 → v5)</td></tr>
+    <tr><td>Gripper fix</td><td class="path">results/2026-09-26_gripper_fix/ (README, F1–F3, V1, V2)</td></tr>
+    <tr><td>Ladder align / lift / stack</td><td class="path">results/2026-09-26_summary/ (F4, V3, V4)</td></tr>
+    <tr><td>Centred stacking</td><td class="path">results/2026-09-27_centered/ (README, F5, F6, V5)</td></tr>
+    <tr><td>Three plates, loose bottom, realistic arm</td><td class="path">results/2026-09-27_stack3/ (README, F7, F8, V6, V7, stages.md)</td></tr>
+    <tr><td>Library comparison</td><td class="path">results/2026-09-27_libs/ (README, F9, libs.md)</td></tr>
+    <tr><td>Training curves / TensorBoard</td><td class="path">results/2026-09-28_presentation/T1 · RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz</td></tr>
+    <tr><td>Detailed report · how to demo · learning package</td><td class="path">RL_DT_docs/_docs_legion/reports/wellplate-round-2026-09-28.md · guides/SHOWING_PROGRESS.md · learn/</td></tr>
+  </table>
+  <div class="foot">17</div>
+</section>
+
+</div>
+<div class="nav"><button onclick="go(-1)">‹</button><span id="count"></span><button onclick="go(1)">›</button></div>
+<script>
+  const slides = [...document.querySelectorAll('section.slide')];
+  let i = 0;
+  try { const h = parseInt(location.hash.slice(1)); if (h >= 1 && h <= slides.length) i = h - 1; } catch (e) {}
+  function show(n) {
+    slides.forEach(s => s.querySelectorAll('video').forEach(v => v.pause()));
+    slides[i].classList.remove('active'); i = Math.max(0, Math.min(slides.length - 1, n)); slides[i].classList.add('active');
+    document.getElementById('count').textContent = (i + 1) + ' / ' + slides.length; history.replaceState(null, '', '#' + (i + 1));
+  }
+  function go(d) { show(i + d); }
+  document.addEventListener('keydown', e => {
+    if (['ArrowRight', 'PageDown', ' '].includes(e.key)) { e.preventDefault(); go(1); }
+    else if (['ArrowLeft', 'PageUp'].includes(e.key)) { e.preventDefault(); go(-1); }
+    else if (e.key === 'Home') show(0); else if (e.key === 'End') show(slides.length - 1);
+    else if (e.key === 'f' || e.key === 'F') { document.fullscreenElement ? document.exitFullscreen() : document.documentElement.requestFullscreen(); }
+    else if (e.key === 'p' || e.key === 'P') window.print();
+  });
+  show(i);
+</script>
+</body>
+</html>

@@ -17,7 +17,7 @@ container-based Isaac work.
 1. The toolkit runs on Blackwell GPUs (it segfaulted; now trains, and actually uses the GPU rather
    than silently falling back to CPU).
 2. The toolkit imports in a torch-only container — the blocker recorded in
-   [`strategy.md`](../_docs/strategy.md) Part 2.
+   [`strategy.md`](../../_docs/strategy.md) Part 2.
 3. The toolkit drives Martin's door task through **Isaac Lab**, scaling to 128 parallel robots.
 4. The toolkit drives the same task through **bare Isaac Sim**, with no Isaac Lab and no Docker.
 5. The adapter is demonstrably general — it drove four Isaac Lab built-in tasks unchanged.
@@ -54,7 +54,7 @@ machines where the segfault never occurs.
 **Fix:** 5 files, 191 lines. Pre-load Triton at package import, guarded so it does nothing when TF is
 already present; make the Keras agents, models and the TF-backed `Model` base class import lazily.
 Additive — the Keras agents were regression-tested and still train. Standalone patch and full
-write-up in [`../_patches/README.md`](../_patches/README.md).
+write-up in [`../_patches/README.md`](../../../RL_DT/_patches/README.md).
 
 **The side effect was worth more than the fix itself.** The lazy imports mean the package now imports
 where TensorFlow is not installed at all — which is exactly the Isaac Lab container. Everything in
@@ -236,12 +236,12 @@ existing rl_games PPO baseline?* — is unanswered, and needs long runs on the I
 
 | | |
 |---|---|
-| Session detail, day by day | [`rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md`](rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md) |
+| Session detail, day by day | [`rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md`](../rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md) |
 | Every number and code defect | [`PUBLICATION_MATERIALS_legion.md`](../PUBLICATION_MATERIALS_legion.md) |
 | Machine setup and its limits | [`environment_legion.md`](../environment_legion.md) |
 | Decisions and their reasoning | [`decisions_legion.md`](../decisions_legion.md) |
 | Items for Malachi, Martin, Alvika | [`team-discussion_legion.md`](../team-discussion_legion.md) |
-| The toolkit fix, standalone | [`../_patches/README.md`](../_patches/README.md) |
+| The toolkit fix, standalone | [`../_patches/README.md`](../../../RL_DT/_patches/README.md) |
 | Isaac Lab route code | `../_toolkits/toolkit-isaaclab/isaac_integration/` |
 | Bare Isaac Sim route code | `../_toolkits/toolkit-isaacsim/` |
 

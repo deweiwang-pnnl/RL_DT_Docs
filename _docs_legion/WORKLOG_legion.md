@@ -13,12 +13,76 @@ numbers and code defects go to
 
 | Round | Goal | Status |
 |---|---|---|
-| [Round-2026-09-22](rounds/Round-2026-09-22-wellplate-grasp-fix.md) | Fix the grasp with Martin's robot, then the 2-plate stack, centred stacking, 3 plates, loose bottom plate, realistic arm, other libraries | grasp fixed (16/16); align 82 %, lift 87.5 %, 2-plate stack 50.8 %; **centred stack (5 mm / 3° / 3°) 90.6 %**; **3 plates, all loose, loose bottom plate, realistic arm 54.7 %** (deterministic) |
+| [Round-2026-09-22](rounds/Round-2026-09-22-wellplate-grasp-fix.md) | Fix the grasp with Martin's robot, then the 2-plate stack, centred stacking, 3 plates, loose bottom plate, realistic arm, other libraries | grasp fixed (16/16); align 82 %, lift 87.5 %, 2-plate stack 50.8 %; **centred stack (5 mm / 3° / 3°) 90.6 %**; **3 plates, all loose, loose bottom plate, realistic arm 54.7 %** (deterministic); E5 library comparison; meeting materials 09-28 |
 | [Round-2026-09-14 (09-20/21 part)](rounds/Round-2026-09-14-isaaclab-tuberacking.md#2026-09-20--re-scoped-to-the-well-plate-task-overnight-ladder-launched) | Well-plate ladder: reach → align → lift → stack | reach 96.7 %, align 96 %, lift 0 % (8 runs), stack 0 %; presentation videos 09-21 |
-| [Round-2026-09-14](rounds/Round-2026-09-14-isaaclab-tuberacking.md) | Isaac Lab on Alvika's tube task, then the well-plate ladder (reach → align → lift → stack → place) | reach 96.7 %, align 96 %; lift blocked by the converted 2F-140 gripper — see [presentations/2026-09-21-wellplate-status.md](presentations/2026-09-21-wellplate-status.md) |
+| [Round-2026-09-14](rounds/Round-2026-09-14-isaaclab-tuberacking.md) | Isaac Lab on Alvika's tube task, then the well-plate ladder (reach → align → lift → stack → place) | reach 96.7 %, align 96 %; lift blocked by the converted 2F-140 gripper — see [presentations/2026-09-21-wellplate-status/](presentations/2026-09-21-wellplate-status/) |
 | [Round-2026-08-27](rounds/Round-2026-08-27-legion-gpu-fix-and-dt-integration.md) | Stand the project up on a new machine, then connect the RL toolkit to the digital twin | done — three integration routes working, toolkit fixed for Blackwell GPUs, Isaac Sim installed both ways |
 
 ---
+
+## 2026-09-22 → 09-28 — The lift blocker was ours; three plates stacked, centred, all loose
+
+Commits 09-26 03:03 → 09-27 20:12 (`RL_DT`, 82 commits; code +5 230 lines in 48 files) plus the 09-28 wrap-up.
+The 09-22 check of Martin's GRIPPERFIX and the 09-25 message to him predate the first commit (dates from the round
+file). Started with lift at 0 % and no plate ever lifted; ended with three of Martin's plates stacked with every plate
+loose. All numbers deterministic, 128 episodes, one training seed each. Detail:
+[round file](rounds/Round-2026-09-22-wellplate-grasp-fix.md), [report](reports/wellplate-round-2026-09-28.md).
+
+- **The lift blocker was our own gripper setup, not Martin's asset.** Four defects, each measured before fixing: pad
+  joint driven to 0 (a URDF habit; in the USD it closes the four-bar loop), grasp height (18.4 mm pad travel),
+  closing axis (the 128 mm side), contact settings. Grasp gate 16/16 (09-26 03:03). Martin's GRIPPERFIX layer does
+  not compose with our robot file and was not used. [D12](PUBLICATION_MATERIALS_legion.md#d12),
+  [D13](PUBLICATION_MATERIALS_legion.md#d13), [D16](PUBLICATION_MATERIALS_legion.md#d16)
+- **Ladder:** align 82.0 %, lift 87.5 %, 2-plate stack 50.8 % (09-26 20:24). [R7](PUBLICATION_MATERIALS_legion.md#r7)
+- **Centred 2-plate stack** (5 mm / 3° twist / 3° tilt, released) **90.6 %** (09-27 05:13); the 09-26 policy scores
+  0 %. Made learnable by a twist observation, a tolerance curriculum and a success bonus larger than the critic's
+  noise. [R8](PUBLICATION_MATERIALS_legion.md#r8), [M4](PUBLICATION_MATERIALS_legion.md#m4)
+- **Three plates:** hand-off 52.3 %, all loose 46.1 %, loose bottom plate 49.2 %, realistic arm 54.7 % (09-27 11:43 →
+  16:09). Three single-policy attempts failed — an input-normaliser spike, then the first skill overwritten (swap
+  test), then learned avoidance of grasping. What worked: two skills, a rising-stack curriculum, start states
+  recorded at real hand-offs, and a mass curriculum for the loose bottom plate.
+  [R9](PUBLICATION_MATERIALS_legion.md#r9), [M5](PUBLICATION_MATERIALS_legion.md#m5),
+  [M6](PUBLICATION_MATERIALS_legion.md#m6)
+- **Realistic arm:** gravity-compensation torques make the gravity-on arm track like the gravity-off arm (434 mm →
+  0.0 mm), so the policies transfer unchanged. [R10](PUBLICATION_MATERIALS_legion.md#r10)
+- **Other libraries (09-27 20:12):** Reach is easy for rsl_rl, skrl and rl_games PPO. On Align from scratch only
+  skrl PPO learned it (98.4 %). My first explanation, rsl_rl's learning-rate floor, was tested with a fixed-rate run
+  and **rejected**; the gap is open. [R11](PUBLICATION_MATERIALS_legion.md#r11),
+  [D15](PUBLICATION_MATERIALS_legion.md#d15)
+- **Mistakes of my own, caught and recorded:** the centred driver restarted C1 from the 09-26 policy after C1a–C1c
+  (stopped within a minute); the success bonus had paid 0 in every stage until 09-26
+  ([D14](PUBLICATION_MATERIALS_legion.md#d14)); a claimed cause for the black bottom plate went into the slides,
+  then was withdrawn.
+
+**Decisions** (who, why, what it rules out — full entries in [`decisions_legion.md`](decisions_legion.md)):
+- Martin's robot only, no Isaac Lab built-in robot (Dewei, 09-22). Rules out swapping the gripper asset as the fix.
+- Robot gravity off for training, realistic arm later (Dewei, 09-26). The uncompensated arm stalled 0.3–0.4 m short.
+  Rules out training on the uncompensated arm; revisited in E4.
+- Bottom plate fixed first, loose later (Dewei, 09-26). Stages the hardest physics last.
+- Centred criteria 5 mm / 3° / 3° with a 40 % gate (Dewei, PLAN v4). Fixes what "done" means for every later stage.
+- Gate on the deterministic evaluation, not training success (Claude, 09-26). Rules out reporting noisy training
+  numbers.
+- Two skills instead of one policy (Claude, 09-27, within the PLAN v5 autonomy rules). Rules out, for now, a single
+  policy that decides when the first plate is done.
+
+**What this does not show:** run-to-run variance (single seeds); a reliable final setting (36 % time-outs, 9 % drops);
+one policy for the whole task; perception (privileged poses), a moving base, or randomised plate physics; why skrl
+beats rsl_rl on Align; why the bottom plate renders black.
+
+**Next:** 3 seeds per result; cut the time-outs; one chaining policy; domain randomisation; test skrl's value-target
+normalisation against rsl_rl; camera-based plate detection (ask Alvika); Martin on the black plate and a
+self-contained robot USD. Questions are in [`team-discussion_legion.md`](team-discussion_legion.md).
+
+### Documents produced this round
+
+| File | What it holds |
+|---|---|
+| [`presentations/2026-09-28-weekly/`](presentations/2026-09-28-weekly/) | Meeting slides (offline HTML with videos, Marp copy for PowerPoint), hand-out |
+| [`reports/wellplate-round-2026-09-28.md`](reports/wellplate-round-2026-09-28.md) | The detailed report with every result, diagnosis and evidence path |
+| [`guides/SHOWING_PROGRESS.md`](guides/SHOWING_PROGRESS.md) | How to show the recordings (with timestamps) and TensorBoard |
+| [`learn/`](learn/) | Learning package: seven parts with check-yourself questions, plus slides |
+| `RL_DT/_isaaclab_wellplate/` `PROGRESS.md`, `PLAN.md` v3–v5, `results/2026-09-2{6,7,8}_*` | Chronology, plans, evidence (videos, charts, evaluation JSONs) |
+| `RL_Twin/_exports/tensorboard_wellplate_2026-09-28.tar.gz` (**not in git**) | 40 runs' event files, 14 MB |
 
 ## 2026-08-30 → 08-31 — Do the routes actually learn? No, and here is why
 
@@ -60,7 +124,7 @@ it was making the toolkit run at all.
   TensorFlow/Triton native-library conflict — whichever loads second crashes — plus a silent second
   symptom where importing TF makes torch stop seeing the GPU. Fixed in 5 files; the Keras agents were
   regression-tested and still train. [D1](PUBLICATION_MATERIALS_legion.md#d1),
-  patch in [`../_patches/`](../_patches/README.md). **An initial diagnosis blaming an upstream
+  patch in [`../_patches/`](../../RL_DT/_patches/README.md). **An initial diagnosis blaming an upstream
   PyTorch/Blackwell bug was wrong** and is recorded as such.
 - **Side effect worth more than the fix:** the lazy-import work cleared the blocker in
   [`strategy.md`](../_docs/strategy.md) Part 2 — the package now imports in a torch-only container, which is

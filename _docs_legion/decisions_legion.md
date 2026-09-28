@@ -122,3 +122,64 @@ Result: 617 MB → 42 MB, and a repo that clones in seconds on both machines.
 
 **Rules out:** resuming training from a mid-run epoch on the other machine, and re-opening the
 interactive TensorBoard curves there. Both remain available on this machine and on the USB copy.
+
+## 2026-09-22 — Martin's robot only; fix the lift blocker on our side (Dewei)
+
+**Chose:** keep Martin's Ridgeback + UR7e + Robotiq 2F-140 (`Ridgeback_UR7e_2f140.usd`); no Isaac Lab built-in robot.
+Martin's GRIPPERFIX layer was checked and not used ([D16](PUBLICATION_MATERIALS_legion.md#d16)).
+
+**Why:** the task is Martin's twin; a different robot would train a policy that does not transfer. The measured cause
+turned out to be our own gripper setup ([D12](PUBLICATION_MATERIALS_legion.md#d12),
+[D13](PUBLICATION_MATERIALS_legion.md#d13)), fixed in our Python with Martin's files untouched.
+
+**Rules out:** swapping the gripper asset as the fix; waiting on Martin for a new robot file.
+
+## 2026-09-26 — Robot gravity off for training; realistic arm as a later stage (Dewei)
+
+**Chose:** `disable_gravity` on the robot's links (plates keep gravity); arm gains kept at 400 / 80. Commit 52616ad
+(09-26 12:42).
+
+**Why:** the stiff PD arm without compensation stalled 0.3–0.4 m short of IK targets (410 mm measured); a real UR
+controller compensates gravity. Revisited on 09-27: gravity on + compensation torques tracks identically and the
+trained policies transfer unchanged ([R10](PUBLICATION_MATERIALS_legion.md#r10)).
+
+**Rules out:** training on an uncompensated gravity-on arm.
+
+## 2026-09-26 — Bottom plate fixed first, loose later (Dewei)
+
+**Chose:** the stack target kinematic for the 2-plate and centred stages; a loose (dynamic) bottom plate as its own
+stage (E3, 09-27).
+
+**Why:** stage the hardest contact physics last. E3 confirmed it needed its own curriculum (mass 20 kg → 50 g).
+
+**Rules out:** nothing permanently — E3 now runs with a loose bottom plate.
+
+## 2026-09-26 — Gate every stage on a deterministic evaluation (Claude)
+
+**Chose:** stage gates and reported numbers come from `eval_policy.py` (mean action, 128 episodes), not from training
+logs. Commit 387ef5b (09-26 14:06).
+
+**Why:** with a binary gripper, exploration noise opens the grip at random: lift trained at 19.9 % but scored 87.5 %
+deterministically ([M3](PUBLICATION_MATERIALS_legion.md#m3)).
+
+**Rules out:** reporting training-log success as a result.
+
+## 2026-09-26 — Centred-stack criteria 5 mm / 3° / 3°, released, 40 % gate (Dewei)
+
+**Chose:** PLAN v4 (commit d91d264, 09-26 22:09): centring ≤ 5 mm, twist ≤ 3° (either end), tilt ≤ 3°, released
+and at rest; ≥ 40 % of 128 deterministic episodes. The same per-plate criteria for three plates.
+
+**Why:** a plate stack a lab can use; the gate leaves room for sampling noise while requiring a clear majority skill.
+
+**Rules out:** reporting the looser 3 cm stack (50.8 %) as the stacking result.
+
+## 2026-09-27 — Two skills instead of one policy for three plates (Claude, under the PLAN v5 autonomy rules)
+
+**Chose:** the first placement by the C3 policy (later fine-tuned for a loose bottom plate), the second by a separate
+policy trained from it; the evaluator switches by the environment's phase. Commit 0f69624 (09-27 08:14).
+
+**Why:** three single-policy attempts failed with measured causes — a normaliser spike, the first skill overwritten
+(swap test), then learned avoidance of grasping ([M5](PUBLICATION_MATERIALS_legion.md#m5)).
+
+**Rules out, for now:** a single policy that decides when the first plate is done. Worth revisiting once the
+two-skill baseline is solid.

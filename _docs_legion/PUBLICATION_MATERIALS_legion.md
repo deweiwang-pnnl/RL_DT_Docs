@@ -5,6 +5,8 @@ Same rule applies within this file: a measured number or a code defect lives her
 `_legion` documents link to it.
 
 All results 2026-08-27 → 2026-08-29, RTX 5090 Laptop (Blackwell, `sm_120`), torch 2.13.0+cu130.
+R7–R11, D12–D17 and M3–M6: 2026-09-22 → 09-28, well-plate task in Isaac Lab 2.3.2 / Isaac Sim 5.1, rsl_rl 5.0.1,
+512 envs, deterministic evaluation over 128 episodes, one training seed per run.
 
 ---
 
@@ -17,6 +19,11 @@ All results 2026-08-27 → 2026-08-29, RTX 5090 Laptop (Blackwell, `sm_120`), to
 - [R4 — Digital twin via bare Isaac Sim](#r4)
 - [R5 — Route comparison](#r5)
 - [R6 — Multi-hour learning runs: neither route learns the task](#r6)
+- [R7 — Well-plate ladder after the grasp fix](#r7)
+- [R8 — Centred 2-plate stack, 90.6 %](#r8)
+- [R9 — Three plates, loose bottom plate](#r9)
+- [R10 — Gravity compensation removes the "robot gravity off" caveat](#r10)
+- [R11 — RL library comparison on the same task](#r11)
 
 **Code defects**
 - [D1 — TensorFlow/Triton native-library conflict (segfault)](#d1)
@@ -30,10 +37,20 @@ All results 2026-08-27 → 2026-08-29, RTX 5090 Laptop (Blackwell, `sm_120`), to
 - [D9 — Replay-buffer sampling is O(n) in buffer size](#d9)
 - [D10 — Door handle is unreachable with the actions Martin's task exposes](#d10)
 - [D11 — Fingertip prims do not resolve their own transforms](#d11)
+- [D12 — 2F-140 loop-closing pad joint driven to 0](#d12)
+- [D13 — Gripper closing axis wrong since 09-20](#d13)
+- [D14 — Isaac Lab's `is_terminated_term` excludes truncations](#d14)
+- [D15 — rsl_rl's KL-adaptive learning rate sits at its floor on these tasks](#d15)
+- [D16 — Martin's GRIPPERFIX layer does not compose with our robot file](#d16)
+- [D17 — The bottom plate's mesh is rotated 48.97° inside its prim](#d17)
 
 **Method notes**
 - [M1 — Why these numbers are not comparable to the published ones](#m1)
 - [M2 — Isaac Sim cannot recreate environments in one process](#m2)
+- [M3 — Report deterministic evaluation, not training success](#m3)
+- [M4 — With success as a truncation, the success bonus is the only gain from finishing](#m4)
+- [M5 — Fine-tuning a precise skill on a harder variant overwrites it](#m5)
+- [M6 — Inputs that never varied in training break a warm start](#m6)
 
 ---
 
@@ -172,6 +189,76 @@ on the task. Reported as such: claiming "learned to open the door" would have be
 in the specific way the brief's no-brute-force-pushing requirement exists to prevent.
 
 The Isaac Lab route's flat 9.38 is the *correct* outcome given [D10](#d10), not a training failure.
+
+### R7 — Well-plate ladder after the grasp fix {#r7}
+
+Well-plate task (Martin's Ridgeback + UR7e + Robotiq 2F-140, Martin's `WellPlates.usd`), PPO (rsl_rl), 512 envs.
+Deterministic evaluation, 128 episodes per number, 2026-09-26.
+
+| Stage | Training tolerance | Result | Strict tolerance | Result |
+|---|---|---|---|---|
+| Align | 4 cm / 20° | **82.0 %** | 2 cm / 15° / 10° | 0.0 % |
+| Lift | 6 cm up, tilt < 10° | **87.5 %** | 10 cm up, tilt < 5° | 14.8 % |
+| Stack, 2 plates | 3 cm / 1.5 cm / 11° | **50.8 %** | 1 cm / 5 mm / 5° | 22.7 % |
+
+On 09-20/21 lift and stack were 0 % (no plate ever lifted). Preconditions: [D12](#d12), [D13](#d13) fixed; the grasp
+held 16/16 in a scripted gate before training. Evidence: `RL_DT/_isaaclab_wellplate/results/2026-09-26_summary/`
+(F4, V3, V4). **Why it matters:** the first plate lifted and stacked in this twin.
+
+### R8 — Centred 2-plate stack, 90.6 % {#r8}
+
+Success = centring ≤ 5 mm, twist ≤ 3° (long edges; 0° and 180° equal), tilt ≤ 3°, gripper open, plate at rest.
+Curriculum, each stage warm-started from the previous, deterministic, 128 episodes:
+
+| C1a 15 mm / 45° / 5° | C1b 30° | C1c 20° | C1 10° | C2 10 mm / 5° / 3° | C3 5 mm / 3° / 3° |
+|---|---|---|---|---|---|
+| 67.2 % | 67.2 % | 73.4 % | 85.2 % | 87.5 % | **90.6 %** |
+
+Successful episodes: median 2.4 mm centring, 0.9° twist, 0.0° tilt. The 09-26 stack policy scores **0 %** at C3
+criteria (median twist 73°). Made learnable by a twist observation, the curriculum and [M4](#m4). Evidence:
+`results/2026-09-27_centered/` (F5 per-episode errors, F6, V5). **Why it matters:** precision placement, not only
+contact — the tolerances of a real plate stack.
+
+### R9 — Three plates, loose bottom plate {#r9}
+
+Each placed plate within 5 mm / 3° / 3° of the one below, both released, the lower plate still in place;
+deterministic, 128 episodes. Two policies (first / second placement, [M5](#m5)).
+
+| Step | Setting | Result | Baseline |
+|---|---|---|---|
+| E1 | next plate handed off into the pick area | **52.3 %** | C3 alone 0 % |
+| E2 | all plates start loose | **46.1 %** | 26.6 % |
+| E3 | + loose 50 g bottom plate, moved ≤ 1 cm | **49.2 %** | — |
+| E4 | + realistic arm ([R10](#r10)) | **54.7 %** | — |
+
+Curricula: second placement with a kinematic middle plate rising 0 / 6.5 / 13 / 19.5 / 26 mm: 80.5 / 70.3 / 82.8 /
+92.2 / **91.4 %** (trained at full height directly: **0.8 %**). First placement onto a loose bottom plate, mass
+20 kg → 2 → 0.5 → 0.15 kg → 50 g: 82.8 / 60.2 / 50.8 / 49.2 / **61.7 %** (untrained at 50 g: 11.7 %). Final setting
+failures: 36 % time-outs, 9 % drops. Evidence: `results/2026-09-27_stack3/` (F7, F8, V6, V7, `stages.md`).
+**Why it matters:** sequential multi-object manipulation with loose objects, and a measured account of what made
+each hard part learnable.
+
+### R10 — Gravity compensation removes the "robot gravity off" caveat {#r10}
+
+IK tracking through the task's own action, 16 envs, P controller, error after 300 steps: gravity off **0.0 mm**;
+gravity on, no compensation **434 mm**; gravity on + G(q) from PhysX inverse dynamics every physics step **0.0 mm**
+(`scripts/probe_arm_tracking.py --arm {default,on,comp}`). The E3 policies, unchanged, on the gravity-on arm:
+**54.7 %** vs 49.2 % gravity off (within sampling noise). **Why it matters:** policies trained with gravity off
+transfer to a compensated arm, as on a real UR controller.
+
+### R11 — RL library comparison on the same task {#r11}
+
+From scratch, 512 envs, same env-step budget, one shared deterministic evaluation, one seed each:
+
+| Stage | rsl_rl PPO | rsl_rl PPO fixed lr 1e-4 | skrl PPO | skrl SAC | rl_games PPO | SB3 PPO |
+|---|---|---|---|---|---|---|
+| Reach (6.1 M steps) | 100 % | 100 % | 100 % | 0 % | 100 % | 0 % |
+| Align (12.3 M steps) | 3.9 % | 0 % | **98.4 %** | 0 % | 0 % | 0 % |
+
+The skrl PPO advantage on Align is **unexplained** ([D15](#d15) was tested and rejected as the cause). SB3 PPO (fixed
+rate + KL early stop) and skrl SAC (one gradient step per 512 env steps) look under-configured — not a verdict.
+Evidence: `results/2026-09-27_libs/` (README, F9, `libs.md`). **Why it matters:** the library changed the outcome on
+an identical task; worth a controlled follow-up (value normalisation, 3 seeds) before choosing one.
 
 ---
 
@@ -328,6 +415,52 @@ as well** - there was no gradient toward opening the door. Substituted a TCP-hei
 Whether the same issue affects Isaac Lab's `FrameTransformer`-based version of these terms was not
 tested, and is worth checking - if it does, Martin's own reward has dead terms too.
 
+### D12 — 2F-140 loop-closing pad joint driven to 0 {#d12}
+
+Our gripper action drove `*_inner_finger_pad_joint` to 0 — a ratio copied from the URDF, where the joint of that name
+is a fixed pad mount. In NVIDIA's USD (`Robotiq_2F_140_physics_edit`) that joint closes the four-bar loop
+(inner_finger → inner_knuckle) and must follow +q, as Isaac Lab's `set_finger_joint_pos_robotiq_2f140` does. Effect:
+the drives fought the linkage and the pads tilted into a V — 12° at the 85 mm contact, 24° closed; with +q, 0.0°.
+Evidence: `results/2026-09-26_gripper_fix/` (F2, V1). Ours, not the asset's; it blocked every lift since 09-20.
+
+### D13 — Gripper closing axis wrong since 09-20 {#d13}
+
+The plate's body frame is 127.6 mm (x) × 85.4 mm (y) × 26.0 mm, measured from the USD geometry relative to the plate
+prim. `CLOSING_AXIS_INDEX` had been 0 since a 09-20 change based on a misread frame, so the fingers closed across the
+128 mm side. Fixed to 1. Evidence: round file 09-26, grasp probe stills.
+
+### D14 — Isaac Lab's `is_terminated_term` excludes truncations {#d14}
+
+`isaaclab.envs.mdp.is_terminated_term` returns the named term only where it is a *termination*, masking time-out
+(truncation) terms. Every success term here is `time_out=True` (so success bootstraps the value — see [M4](#m4)), so
+the success bonus paid **0 in every stage until 09-26**; logs showed `success_bonus 0.0000` beside success 0.27. Fix:
+a reward term reading `termination_manager.get_term(name)` directly (`mdp/wellplate_mdp.py: success_reward`). Easy to
+miss for anyone combining success-as-truncation with a success bonus.
+
+### D15 — rsl_rl's KL-adaptive learning rate sits at its floor on these tasks {#d15}
+
+rsl_rl divides the rate by 1.5 per *minibatch* whenever KL > 2 × `desired_kl` (floor 1e-5). On the well-plate stages
+it sat near the floor: median 2.3e-5 in the centred C-stages, 7.6e-5 on E5 Align (skrl's per-update schedule: median
+1.4e-4). In the centred stages a fixed 1e-4 was part of what let the policy learn to turn. **Not** the cause of the
+E5 gap: rsl_rl with a fixed 1e-4 also scored 0 % on Align ([R11](#r11)). Behaviour, not a bug — reported because the
+default schedule silently limits learning here.
+
+### D16 — Martin's GRIPPERFIX layer does not compose with our robot file {#d16}
+
+`Ridgeback_UR7e_2f140_reworked.GRIPPERFIX.usd` (09-22) is a 12 KB assembly layer. Against our
+`RidgebackWithURGripper/Ridgeback_UR7e.usd` every gripper prim composes as an undefined `over` (it expects `ur7e`
+under `RidgebackWithBasicJoints`; ours has it beside `RidgebackWithStructure`), so the weld target is missing and the
+gripper sits 0.86 m from the wrist. Not used; the fix was on our side ([D12](#d12)). Worth telling Martin so the two
+robot files converge.
+
+### D17 — The bottom plate's mesh is rotated 48.97° inside its prim {#d17}
+
+In `WellPlates.usd` the target plate's mesh (`WellPlateSimple`) is rotated +48.97° about z relative to its prim; the
+other two plates' meshes are aligned with their prims (long side = body x). Measuring twist from body axes is
+therefore wrong by 49° for the bottom plate; we use its long axis `(cos 48.97°, sin 48.97°, 0)` in its body frame.
+Evidence: `scripts/probe_plate_axes.py`, `probe_third_plate.py`. A data characteristic anyone measuring plate
+alignment in this scene needs.
+
 ---
 
 ## Method notes
@@ -359,3 +492,37 @@ that way, the same four tasks finish in minutes.
 Two operational lessons: never loop over Isaac Sim environment creation in-process, and always put a
 timeout on a long-running background job — the 7h40m was invisible precisely because nothing would
 ever have stopped it.
+
+### M3 — Report deterministic evaluation, not training success {#m3}
+
+Training logs measure success **with exploration noise**; with a binary gripper, noise crossing zero opens the grip
+at random. Lift: training 19.9 %, deterministic 87.5 %. Within the centred and three-plate stages training success
+often falls while the deterministic evaluation rises (chart `results/2026-09-28_presentation/T1_training_curves.png`).
+Every number and gate in [R7](#r7)–[R11](#r11) is a separate deterministic evaluation over 128 episodes (one standard
+deviation ≈ 4.4 points at 50 %).
+
+### M4 — With success as a truncation, the success bonus is the only gain from finishing {#m4}
+
+Success ends the episode as a truncation, so the value of the next state is bootstrapped and finishing does not
+forfeit future shaping reward — but then "release now" vs "hold one more step" differ by little more than the bonus.
+Isaac Lab scales rewards by the step (dt = 1/30 s): a bonus of weight 50 pays **1.7**, against a critic error of about
+±5–7 (value loss 25–48). The centred policy placed the plate and held it: C1a **1.6 %**. Weight 600 (≈ 20 per success):
+**67.2 %**. Size a one-off bonus against the critic's noise, not against the per-step rewards.
+
+### M5 — Fine-tuning a precise skill on a harder variant overwrites it {#m5}
+
+Training one policy for both placements destroyed the first-placement skill within ~200 iterations (2-plate task
+90.6 % → 0.8 %). Swap test: C3 weights + the new input normaliser **93.0 %**; new weights + C3's normaliser **3.9 %** —
+the weights, not the inputs. Training single placements delayed but did not prevent it: the policy then learned not
+to grasp at all, because every carry toward the 2-plate stack crashed. What worked: keep the working skill as its own
+policy; make the new part learnable in steps ([R9](#r9) curricula); train the second skill from **start states
+recorded at the real hand-off** — from the home pose its first move dragged the plate just placed (> 5 mm within
+0.17 s in 61 % of envs).
+
+### M6 — Inputs that never varied in training break a warm start {#m6}
+
+rsl_rl normalises inputs as `(x − mean) / (std + 0.01)`. The goal-pose inputs never varied during the 2-plate
+training (fixed bottom plate, locked base), so their std was ≈ 0. With three plates, a base plate lying the other way
+round — physically the same plate — gave a quaternion differing by ~1 per component: a ~100σ input, and first
+placements fell from 15 % to 0 within 200 iterations. Fix: report symmetric quantities in a canonical form (the
+representation closest to the bottom plate's, either end, either sign).

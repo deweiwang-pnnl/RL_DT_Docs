@@ -1,5 +1,9 @@
 # Round 2026-09-22 — Well plate: grasp fix, then the 2-plate stack
 
+**Wrap-up (2026-09-28):** meeting slides [`../presentations/2026-09-28-weekly/`](../presentations/2026-09-28-weekly/),
+detailed report [`../reports/wellplate-round-2026-09-28.md`](../reports/wellplate-round-2026-09-28.md),
+demo guide [`../guides/SHOWING_PROGRESS.md`](../guides/SHOWING_PROGRESS.md), learning package [`../learn/`](../learn/).
+
 **Goal.** Resolve the lift blocker with Martin's robot (no built-in robot), then train the well-plate
 ladder through a 2-plate stack with videos. Plan: `RL_DT/_isaaclab_wellplate/PLAN.md` v3 (approved
 2026-09-26). Continues [Round-2026-09-14](Round-2026-09-14-isaaclab-tuberacking.md).
