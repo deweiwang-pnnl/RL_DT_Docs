@@ -97,14 +97,41 @@ policy 0.0 %). Successful episodes: median 2.4 mm, 0.9° twist, 0.0° tilt. Fina
   truncation bootstrapping → weight 600 (C1a 1.6 % → 67.2 %).
 - Driver bug (C1 restarted from the 09-26 policy after C1a–C1c) caught within a minute.
 
+### 09-27 — PLAN v5: three plates, loose bottom plate, realistic arm (Dewei: "go ahead to the end of the plan")
+
+Chronology: `RL_DT/_isaaclab_wellplate/PROGRESS.md` (09-27 entries); evidence `results/2026-09-27_stack3/` (README,
+F7, F8, V6, V7). All results deterministic, 128 episodes, each placed plate within 5 mm / 3° twist / 3° tilt of the
+one below, released, lower plate still in place (gate ≥ 40 %):
+
+| Step | Setting | Result | Baseline |
+|---|---|---|---|
+| E1 | 3 plates, next plate handed off into the pick area | **52.3 %** | 0 % (C3 alone) |
+| E2 | 3 plates, all loose (plate 3 in its own pick area) | **46.1 %** | 26.6 % |
+| E3 | as E2, bottom plate loose (50 g, moved ≤ 1 cm) | **49.2 %** | — |
+| E4 | as E3, realistic arm (robot gravity on + compensation torques) | **54.7 %** | no retraining needed |
+
+- Third plate = Martin's `WellPlate_01` made dynamic at spawn; role stand-ins (`mover` / `base` / `lower`) let every
+  existing term follow the plate being moved and its base; tasks `Wellplate-Stack3{Handoff,Loose,LooseBottom}-v0`, E4
+  `Wellplate-Stack3LooseBottomRealArm-v0`.
+- One policy for both placements failed (quaternion flip of a 180°-symmetric base; then catastrophic forgetting of the
+  first placement — swap test: weights, not normaliser; then learned avoidance of grasping). **Two skills**: the C3
+  policy places the first plate, a second policy fine-tuned from it the second (evaluator `--checkpoint2`).
+- Second placement learnable only with a **rising stack** (kinematic middle plate 0 → 26 mm: 80–92 %; trained at full
+  height directly 0.8 %) and **start states recorded at real hand-offs** (the second skill's first move otherwise
+  dragged the plate just placed: > 5 mm in 61 % of envs within 0.17 s) plus a displacement penalty.
+- Loose bottom plate: displacement penalty + **mass curriculum** 20 kg → 50 g for the first skill (untrained 11.7 %).
+- Realistic arm: gravity-compensation torques from PhysX inverse dynamics every physics step; tracking identical to
+  gravity off (434 mm off without compensation) → skills transfer unchanged.
+
 ## Open
 
 - Strict precision of the 09-26 ladder (lift 10 cm: 14.8 %) — superseded for stacking by the centred policy (90.6 % at 5 mm).
 - Centred stack failures at C3: 7.8 % time out (mostly the plate never picked up cleanly), 1.6 % drops.
-- Bottom plate is fixed (kinematic); 3 plates not started.
+- Three-plate failures in the final setting: 36 % time-outs (second placement unfinished or middle plate pushed out of
+  tolerance), 9 % drops. Single seed per training run.
 - Realistic arm (gravity on + compensation) — Dewei: later.
 
 ## Next
 
-Dewei's review of the centred-stack results; then PLAN v4 §D4: 3 plates ((ii) hand-off, then (i)), loose bottom plate,
-realistic arm (gravity on + compensation), other RL libraries.
+Dewei's review of PLAN v5 (3 plates, loose bottom plate, realistic arm done; library comparison E5 in PROGRESS.md /
+`results/2026-09-27_libs/`). Not in D4: camera-based plate detection (Alvika), a single policy for both placements.
